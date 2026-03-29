@@ -28,7 +28,7 @@ export function FlapText({
           animated={animated}
           char={char}
           delayMs={delayOffset}
-          key={`${tone}-${width}-${index}`}
+          key={`${width}-${index}`}
           tone={tone}
         />
       ))}

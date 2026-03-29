@@ -26,9 +26,11 @@ export function FlapCell({
   const [currentChar, setCurrentChar] = useState(nextChar);
   const [pendingChar, setPendingChar] = useState(nextChar);
   const [flipping, setFlipping] = useState(false);
+  const [activeTone, setActiveTone] = useState(tone);
   const currentCharRef = useRef(nextChar);
   const pendingCharRef = useRef(nextChar);
   const flippingRef = useRef(false);
+  const activeToneRef = useRef(tone);
   const timeoutIdsRef = useRef<number[]>([]);
 
   useEffect(() => {
@@ -44,8 +46,20 @@ export function FlapCell({
     const startingChar = flippingRef.current
       ? pendingCharRef.current
       : currentCharRef.current;
+    const toneChangeNeeded = tone !== activeToneRef.current;
 
-    if (nextChar === startingChar) {
+    if (nextChar === startingChar && !toneChangeNeeded) {
+      return;
+    }
+
+    if (nextChar === startingChar && toneChangeNeeded) {
+      timeoutIdsRef.current.push(
+        window.setTimeout(() => {
+          activeToneRef.current = tone;
+          setActiveTone(tone);
+        }, delayMs),
+      );
+
       return;
     }
 
@@ -57,6 +71,11 @@ export function FlapCell({
 
       timeoutIdsRef.current.push(
         window.setTimeout(() => {
+          if (stepIndex === 0 && toneChangeNeeded) {
+            activeToneRef.current = tone;
+            setActiveTone(tone);
+          }
+
           pendingCharRef.current = sequenceChar;
           flippingRef.current = true;
           setPendingChar(sequenceChar);
@@ -82,9 +101,9 @@ export function FlapCell({
       });
       timeoutIdsRef.current = [];
     };
-  }, [animated, delayMs, nextChar]);
+  }, [animated, delayMs, nextChar, tone]);
 
-  const toneClass = styles[`tone${capitalize(tone)}`];
+  const toneClass = styles[`tone${capitalize(animated ? activeTone : tone)}`];
   const visibleCurrentChar = animated ? currentChar : nextChar;
   const visiblePendingChar = animated ? pendingChar : nextChar;
   const visibleFlipping = animated ? flipping : false;
