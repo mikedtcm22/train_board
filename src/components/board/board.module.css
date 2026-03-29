@@ -1,0 +1,339 @@
+.scene {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 2.5vw, 2.5rem);
+  overflow: hidden;
+}
+
+.backdropGlow {
+  position: absolute;
+  inset: -15%;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(230, 149, 51, 0.26), transparent 26%),
+    radial-gradient(circle at 80% 20%, rgba(162, 77, 48, 0.18), transparent 24%),
+    radial-gradient(circle at 50% 120%, rgba(255, 205, 122, 0.12), transparent 30%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.boardFrame {
+  position: relative;
+  width: min(100%, 92rem);
+  border-radius: 1.75rem;
+  padding: clamp(0.55rem, 1vw, 0.9rem);
+  background:
+    linear-gradient(145deg, rgba(107, 67, 27, 0.95), rgba(51, 28, 12, 0.98));
+  box-shadow:
+    0 36px 110px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.boardChrome {
+  border-radius: 1.35rem;
+  border: 1px solid rgba(255, 225, 168, 0.15);
+  background:
+    linear-gradient(180deg, rgba(54, 38, 27, 0.93), rgba(28, 21, 16, 0.98));
+  padding: clamp(1rem, 1.9vw, 1.65rem);
+}
+
+.metaBar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: end;
+}
+
+.stationBlock {
+  max-width: 40rem;
+}
+
+.stationEyebrow {
+  color: #d7b47a;
+  font-size: 0.74rem;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+}
+
+.stationTitle {
+  margin-top: 0.5rem;
+  color: #f8edcf;
+  font-size: clamp(2.35rem, 5vw, 5.25rem);
+  line-height: 0.88;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stationSubcopy {
+  margin-top: 0.9rem;
+  color: rgba(248, 237, 207, 0.66);
+  font-size: 0.84rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.clockBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+  min-width: 11rem;
+}
+
+.clockLabel,
+.clockMeta {
+  color: rgba(216, 180, 120, 0.84);
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.clockValue {
+  color: #f6dba9;
+  font-size: clamp(1.6rem, 3vw, 2.65rem);
+  letter-spacing: 0.12em;
+}
+
+.boardBody {
+  margin-top: 1.35rem;
+  border-radius: 1.15rem;
+  border: 1px solid rgba(255, 234, 191, 0.08);
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.03), transparent 18%),
+    linear-gradient(180deg, #16100d 0%, #090808 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.8);
+  padding: clamp(0.75rem, 1.4vw, 1.2rem);
+  overflow: hidden;
+}
+
+.headerRow,
+.boardRow {
+  display: grid;
+  grid-template-columns: 0.5rem repeat(6, max-content);
+  align-items: center;
+  gap: clamp(0.35rem, 0.9vw, 0.7rem);
+}
+
+.headerRow {
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.headerMarker {
+  display: block;
+  width: 0.32rem;
+  height: 100%;
+  min-height: 2.45rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(248, 221, 164, 0.9), rgba(149, 100, 41, 0.65));
+}
+
+.rowList {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.9rem;
+}
+
+.boardRow {
+  padding: 0.1rem 0;
+}
+
+.rowMarker {
+  display: block;
+  width: 0.32rem;
+  min-height: 2.65rem;
+  border-radius: 999px;
+  box-shadow: 0 0 22px currentColor;
+}
+
+.field {
+  min-width: 0;
+}
+
+.fieldCells {
+  display: inline-flex;
+  gap: 0.12rem;
+}
+
+.cell {
+  --cell-color: #f7edd2;
+  --flip-delay: 0ms;
+  position: relative;
+  width: clamp(0.48rem, 0.92vw, 0.86rem);
+  height: clamp(1.3rem, 2.4vw, 2.18rem);
+  border-radius: 0.16rem;
+  perspective: 620px;
+  color: var(--cell-color);
+  background: linear-gradient(180deg, #29211d 0%, #130f0c 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0.24rem 0.55rem rgba(0, 0, 0, 0.28);
+}
+
+.cell::after {
+  content: "";
+  position: absolute;
+  inset: calc(50% - 0.05rem) 0 0;
+  height: 0.1rem;
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.7), transparent);
+  z-index: 5;
+}
+
+.cellTop,
+.cellBottom,
+.flipTop,
+.flipBottom {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.025);
+  backface-visibility: hidden;
+}
+
+.cellTop,
+.flipTop {
+  top: 0;
+  border-radius: 0.16rem 0.16rem 0.08rem 0.08rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 55%),
+    linear-gradient(180deg, #312823 0%, #1b1511 100%);
+}
+
+.cellBottom,
+.flipBottom {
+  bottom: 0;
+  border-radius: 0.08rem 0.08rem 0.16rem 0.16rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 50%),
+    linear-gradient(180deg, #1b1612 0%, #0b0908 100%);
+}
+
+.flipTop,
+.flipBottom {
+  z-index: 7;
+  box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.36);
+}
+
+.flipTop {
+  transform-origin: bottom;
+}
+
+.flipBottom {
+  transform-origin: top;
+  transform: rotateX(90deg);
+}
+
+.cellFlipping .flipTop {
+  animation: flapTop 220ms cubic-bezier(0.45, 0.03, 0.76, 0.43) var(--flip-delay) both;
+}
+
+.cellFlipping .flipBottom {
+  animation: flapBottom 240ms cubic-bezier(0.17, 0.84, 0.36, 1) calc(var(--flip-delay) + 180ms) both;
+}
+
+.topGlyph,
+.bottomGlyph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  font-size: clamp(0.78rem, 1.45vw, 1.42rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-shadow: 0 0 0.32rem rgba(0, 0, 0, 0.35);
+}
+
+.topGlyph {
+  align-items: center;
+  transform: translateY(26%);
+}
+
+.bottomGlyph {
+  align-items: center;
+  transform: translateY(-25%);
+}
+
+.toneDefault {
+  --cell-color: #f7edd2;
+}
+
+.toneHeader {
+  --cell-color: #edcf92;
+}
+
+.toneAmber {
+  --cell-color: #ffd27d;
+}
+
+.toneSky {
+  --cell-color: #7fd9ff;
+}
+
+.toneMint {
+  --cell-color: #91f2c6;
+}
+
+.toneCoral {
+  --cell-color: #ff9a77;
+}
+
+@keyframes flapTop {
+  0% {
+    transform: rotateX(0deg);
+    filter: brightness(1);
+  }
+
+  100% {
+    transform: rotateX(-92deg);
+    filter: brightness(0.72);
+  }
+}
+
+@keyframes flapBottom {
+  0% {
+    transform: rotateX(90deg);
+    filter: brightness(0.65);
+  }
+
+  100% {
+    transform: rotateX(0deg);
+    filter: brightness(1);
+  }
+}
+
+@media (max-width: 860px) {
+  .metaBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .clockBlock {
+    align-items: flex-start;
+  }
+
+  .boardFrame {
+    width: 100%;
+  }
+
+  .scene {
+    place-items: start center;
+  }
+
+  .boardBody {
+    overflow-x: auto;
+  }
+
+  .rowList,
+  .headerRow {
+    min-width: max-content;
+  }
+}

@@ -7,6 +7,20 @@ Digital household calendar display styled like a split-flap train station board.
 - [Product Requirements Document](./docs/product-requirements.md)
 - [Technical Implementation Plan](./docs/technical-implementation-plan.md)
 
-## Project Intent
+## Status
 
-This project is a hosted web application that connects to a shared Google Calendar and renders upcoming events on a wall-mounted display with high-fidelity split-flap animation.
+Phase 1 is now underway. The repository includes a static Next.js prototype with:
+
+- a full-screen `/display` route
+- a split-flap board UI with animated character changes
+- rotating mock family calendar states to exercise the animation system
+- a placeholder `/admin` route reserved for future settings work
+
+## Local Development
+
+```bash
+npm install
+npm run dev
+```
+
+Then open `http://localhost:3000/display`.
