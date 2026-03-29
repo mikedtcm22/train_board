@@ -57,10 +57,12 @@ export function FlapCell({
       style={{ ["--flip-delay" as string]: `${delayMs}ms` }}
     >
       <span className={styles.cellTop}>
-        <span className={styles.topGlyph}>{visibleCurrentChar}</span>
+        <span className={`${styles.halfGlyph} ${styles.halfGlyphTop}`}>
+          {visibleCurrentChar}
+        </span>
       </span>
       <span className={styles.cellBottom}>
-        <span className={styles.bottomGlyph}>
+        <span className={`${styles.halfGlyph} ${styles.halfGlyphBottom}`}>
           {visibleFlipping ? visiblePendingChar : visibleCurrentChar}
         </span>
       </span>
@@ -68,10 +70,14 @@ export function FlapCell({
       {visibleFlipping ? (
         <>
           <span className={styles.flipTop}>
-            <span className={styles.topGlyph}>{visibleCurrentChar}</span>
+            <span className={`${styles.halfGlyph} ${styles.halfGlyphTop}`}>
+              {visibleCurrentChar}
+            </span>
           </span>
           <span className={styles.flipBottom}>
-            <span className={styles.bottomGlyph}>{visiblePendingChar}</span>
+            <span className={`${styles.halfGlyph} ${styles.halfGlyphBottom}`}>
+              {visiblePendingChar}
+            </span>
           </span>
         </>
       ) : null}

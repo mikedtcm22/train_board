@@ -51,14 +51,6 @@ export function BoardRow({ row, rowIndex }: BoardRowProps) {
         <FlapText
           delayOffset={rowIndex * 34}
           tone="default"
-          value={row.location}
-          width={BOARD_FIELD_WIDTHS.location}
-        />
-      </div>
-      <div className={styles.field}>
-        <FlapText
-          delayOffset={rowIndex * 34}
-          tone="default"
           value={row.start}
           width={BOARD_FIELD_WIDTHS.start}
         />

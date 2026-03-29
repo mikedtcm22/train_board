@@ -1,10 +1,9 @@
 export const BOARD_FIELD_WIDTHS = {
   date: 6,
-  name: 18,
-  location: 10,
+  name: 32,
   start: 5,
   end: 5,
-  status: 12,
+  status: 13,
 } as const;
 
 export type UserTone = "amber" | "sky" | "mint" | "coral";
@@ -13,7 +12,6 @@ export type BoardRowData = {
   id: string;
   date: string;
   name: string;
-  location: string;
   start: string;
   end: string;
   status: string;
@@ -21,23 +19,16 @@ export type BoardRowData = {
 };
 
 export type BoardSnapshot = {
-  clockLabel: string;
   rows: BoardRowData[];
-  stationLabel: string;
-  stationTitle: string;
 };
 
 export const demoSnapshots: BoardSnapshot[] = [
   {
-    stationLabel: "Kitchen Terminal",
-    stationTitle: "Family Schedule",
-    clockLabel: "09:12 AM",
     rows: [
       {
         id: "soccer",
         date: "MAR 28",
-        name: "KAI SOCCER",
-        location: "RIVER PK",
+        name: "KAI SOCCER AT RIVER PARK",
         start: "09:30",
         end: "11:00",
         status: "STARTING SOON",
@@ -46,8 +37,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "market",
         date: "MAR 28",
-        name: "FARMERS MKT",
-        location: "DOWNTOWN",
+        name: "FARMERS MARKET DOWNTOWN",
         start: "11:30",
         end: "12:15",
         status: "",
@@ -56,8 +46,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "brunch",
         date: "MAR 28",
-        name: "BRUNCH W ANA",
-        location: "LINDEN",
+        name: "BRUNCH WITH ANA AT LINDEN",
         start: "12:30",
         end: "02:00",
         status: "",
@@ -66,8 +55,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "library",
         date: "MAR 28",
-        name: "LIBRARY RUN",
-        location: "EAST SIDE",
+        name: "LIBRARY RUN EAST SIDE",
         start: "02:30",
         end: "03:15",
         status: "",
@@ -76,8 +64,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "dinner",
         date: "MAR 28",
-        name: "DINNER PREP",
-        location: "HOME",
+        name: "DINNER PREP AT HOME",
         start: "05:30",
         end: "06:20",
         status: "",
@@ -86,8 +73,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "movie",
         date: "MAR 28",
-        name: "MOVIE NIGHT",
-        location: "LIVING RM",
+        name: "MOVIE NIGHT IN LIVING ROOM",
         start: "07:30",
         end: "09:00",
         status: "",
@@ -96,15 +82,11 @@ export const demoSnapshots: BoardSnapshot[] = [
     ],
   },
   {
-    stationLabel: "Kitchen Terminal",
-    stationTitle: "Family Schedule",
-    clockLabel: "09:47 AM",
     rows: [
       {
         id: "soccer",
         date: "MAR 28",
-        name: "KAI SOCCER",
-        location: "RIVER PK",
+        name: "KAI SOCCER AT RIVER PARK",
         start: "09:30",
         end: "11:00",
         status: "IN PROGRESS",
@@ -113,8 +95,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "market",
         date: "MAR 28",
-        name: "FARMERS MKT",
-        location: "DOWNTOWN",
+        name: "FARMERS MARKET DOWNTOWN",
         start: "11:30",
         end: "12:15",
         status: "STARTING SOON",
@@ -123,8 +104,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "brunch",
         date: "MAR 28",
-        name: "BRUNCH W ANA",
-        location: "LINDEN",
+        name: "BRUNCH WITH ANA AT LINDEN",
         start: "12:30",
         end: "02:00",
         status: "",
@@ -133,8 +113,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "library",
         date: "MAR 28",
-        name: "LIBRARY RUN",
-        location: "EAST SIDE",
+        name: "LIBRARY RUN EAST SIDE",
         start: "02:30",
         end: "03:15",
         status: "",
@@ -143,8 +122,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "dinner",
         date: "MAR 28",
-        name: "DINNER PREP",
-        location: "HOME",
+        name: "DINNER PREP AT HOME",
         start: "05:30",
         end: "06:20",
         status: "",
@@ -153,8 +131,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "movie",
         date: "MAR 28",
-        name: "MOVIE NIGHT",
-        location: "LIVING RM",
+        name: "MOVIE NIGHT IN LIVING ROOM",
         start: "07:30",
         end: "09:00",
         status: "",
@@ -163,15 +140,11 @@ export const demoSnapshots: BoardSnapshot[] = [
     ],
   },
   {
-    stationLabel: "Kitchen Terminal",
-    stationTitle: "Family Schedule",
-    clockLabel: "11:48 AM",
     rows: [
       {
         id: "market",
         date: "MAR 28",
-        name: "FARMERS MKT",
-        location: "DOWNTOWN",
+        name: "FARMERS MARKET DOWNTOWN",
         start: "11:30",
         end: "12:15",
         status: "IN PROGRESS",
@@ -180,8 +153,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "brunch",
         date: "MAR 28",
-        name: "BRUNCH W ANA",
-        location: "LINDEN",
+        name: "BRUNCH WITH ANA AT LINDEN",
         start: "12:30",
         end: "02:00",
         status: "STARTING SOON",
@@ -190,8 +162,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "library",
         date: "MAR 28",
-        name: "LIBRARY RUN",
-        location: "EAST SIDE",
+        name: "LIBRARY RUN EAST SIDE",
         start: "02:30",
         end: "03:15",
         status: "",
@@ -200,8 +171,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "dinner",
         date: "MAR 28",
-        name: "DINNER PREP",
-        location: "HOME",
+        name: "DINNER PREP AT HOME",
         start: "05:30",
         end: "06:20",
         status: "",
@@ -210,8 +180,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "movie",
         date: "MAR 28",
-        name: "MOVIE NIGHT",
-        location: "LIVING RM",
+        name: "MOVIE NIGHT IN LIVING ROOM",
         start: "07:30",
         end: "09:00",
         status: "",
@@ -220,8 +189,7 @@ export const demoSnapshots: BoardSnapshot[] = [
       {
         id: "airport",
         date: "MAR 29",
-        name: "AIRPORT RUN",
-        location: "TERMINAL B",
+        name: "AIRPORT RUN TERMINAL B",
         start: "08:00",
         end: "09:10",
         status: "",

@@ -2,124 +2,70 @@
   position: relative;
   min-height: 100vh;
   display: grid;
-  place-items: center;
-  padding: clamp(1rem, 2.5vw, 2.5rem);
+  place-items: stretch;
+  padding: clamp(0.6rem, 1.2vw, 1.1rem);
   overflow: hidden;
 }
 
-.backdropGlow {
-  position: absolute;
-  inset: -15%;
+.boardSurface {
+  width: 100%;
+  min-height: calc(100vh - clamp(1.2rem, 2.4vw, 2.2rem));
+  display: grid;
+  grid-template-rows: auto 1fr;
   background:
-    radial-gradient(circle at 20% 15%, rgba(230, 149, 51, 0.26), transparent 26%),
-    radial-gradient(circle at 80% 20%, rgba(162, 77, 48, 0.18), transparent 24%),
-    radial-gradient(circle at 50% 120%, rgba(255, 205, 122, 0.12), transparent 30%);
-  filter: blur(30px);
-  pointer-events: none;
-}
-
-.boardFrame {
-  position: relative;
-  width: min(100%, 92rem);
-  border-radius: 1.75rem;
-  padding: clamp(0.55rem, 1vw, 0.9rem);
-  background:
-    linear-gradient(145deg, rgba(107, 67, 27, 0.95), rgba(51, 28, 12, 0.98));
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.025), transparent 20%),
+    linear-gradient(180deg, #17110d 0%, #0b0908 100%);
+  border: 1px solid rgba(255, 230, 178, 0.05);
   box-shadow:
-    0 36px 110px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.45);
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.72);
+  overflow: hidden;
 }
 
-.boardChrome {
-  border-radius: 1.35rem;
-  border: 1px solid rgba(255, 225, 168, 0.15);
-  background:
-    linear-gradient(180deg, rgba(54, 38, 27, 0.93), rgba(28, 21, 16, 0.98));
-  padding: clamp(1rem, 1.9vw, 1.65rem);
-}
-
-.metaBar {
+.boardTopbar {
   display: flex;
   justify-content: space-between;
-  gap: 1.5rem;
-  align-items: end;
+  align-items: start;
+  padding: clamp(0.95rem, 1.8vw, 1.45rem) clamp(1rem, 2vw, 1.7rem) 0;
 }
 
-.stationBlock {
-  max-width: 40rem;
+.topbarSpacer {
+  min-height: 0.1rem;
 }
 
-.stationEyebrow {
-  color: #d7b47a;
-  font-size: 0.74rem;
-  letter-spacing: 0.36em;
-  text-transform: uppercase;
+.nowPanel {
+  display: grid;
+  gap: 0.2rem;
+  justify-items: end;
 }
 
-.stationTitle {
-  margin-top: 0.5rem;
-  color: #f8edcf;
-  font-size: clamp(2.35rem, 5vw, 5.25rem);
-  line-height: 0.88;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.stationSubcopy {
-  margin-top: 0.9rem;
-  color: rgba(248, 237, 207, 0.66);
-  font-size: 0.84rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.clockBlock {
+.nowStack {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.3rem;
-  min-width: 11rem;
+  justify-content: flex-end;
 }
 
-.clockLabel,
-.clockMeta {
-  color: rgba(216, 180, 120, 0.84);
-  font-size: 0.72rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-}
-
-.clockValue {
-  color: #f6dba9;
-  font-size: clamp(1.6rem, 3vw, 2.65rem);
-  letter-spacing: 0.12em;
-}
-
-.boardBody {
-  margin-top: 1.35rem;
-  border-radius: 1.15rem;
-  border: 1px solid rgba(255, 234, 191, 0.08);
-  background:
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.03), transparent 18%),
-    linear-gradient(180deg, #16100d 0%, #090808 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.8);
-  padding: clamp(0.75rem, 1.4vw, 1.2rem);
-  overflow: hidden;
+.boardGrid {
+  padding: 0 clamp(1rem, 2vw, 1.7rem) clamp(1rem, 2vw, 1.5rem);
+  overflow-x: auto;
 }
 
 .headerRow,
 .boardRow {
-  display: grid;
-  grid-template-columns: 0.5rem repeat(6, max-content);
+  width: max-content;
+  display: inline-grid;
+  grid-template-columns:
+    0.5rem
+    max-content
+    max-content
+    max-content
+    max-content
+    max-content;
   align-items: center;
-  gap: clamp(0.35rem, 0.9vw, 0.7rem);
+  gap: clamp(0.28rem, 0.72vw, 0.56rem);
 }
 
 .headerRow {
-  padding-bottom: 0.9rem;
+  padding-bottom: 0.7rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -134,12 +80,13 @@
 
 .rowList {
   display: grid;
-  gap: 0.65rem;
-  margin-top: 0.9rem;
+  gap: 0.7rem;
+  margin-top: 0.75rem;
+  width: max-content;
 }
 
 .boardRow {
-  padding: 0.1rem 0;
+  padding: 0.12rem 0;
 }
 
 .rowMarker {
@@ -156,31 +103,35 @@
 
 .fieldCells {
   display: inline-flex;
-  gap: 0.12rem;
+  gap: 0.1rem;
 }
 
 .cell {
   --cell-color: #f7edd2;
   --flip-delay: 0ms;
+  --cell-height: clamp(1.58rem, 2.52vw, 2.42rem);
+  --cell-width: clamp(0.58rem, 0.96vw, 0.92rem);
   position: relative;
-  width: clamp(0.48rem, 0.92vw, 0.86rem);
-  height: clamp(1.3rem, 2.4vw, 2.18rem);
+  width: var(--cell-width);
+  height: var(--cell-height);
   border-radius: 0.16rem;
   perspective: 620px;
   color: var(--cell-color);
-  background: linear-gradient(180deg, #29211d 0%, #130f0c 100%);
+  background: linear-gradient(180deg, #342821 0%, #120f0d 100%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
-    0 0.24rem 0.55rem rgba(0, 0, 0, 0.28);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.62),
+    0 0.2rem 0.52rem rgba(0, 0, 0, 0.28);
 }
 
 .cell::after {
   content: "";
   position: absolute;
-  inset: calc(50% - 0.05rem) 0 0;
-  height: 0.1rem;
-  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.7), transparent);
+  left: 0;
+  right: 0;
+  top: calc(50% - 0.05rem);
+  height: 0.11rem;
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.76), transparent);
   z-index: 5;
 }
 
@@ -193,7 +144,7 @@
   width: 100%;
   height: 50%;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.028);
   backface-visibility: hidden;
 }
 
@@ -202,8 +153,8 @@
   top: 0;
   border-radius: 0.16rem 0.16rem 0.08rem 0.08rem;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 55%),
-    linear-gradient(180deg, #312823 0%, #1b1511 100%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 56%),
+    linear-gradient(180deg, #3c2f28 0%, #1e1713 100%);
 }
 
 .cellBottom,
@@ -211,8 +162,8 @@
   bottom: 0;
   border-radius: 0.08rem 0.08rem 0.16rem 0.16rem;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 50%),
-    linear-gradient(180deg, #1b1612 0%, #0b0908 100%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 48%),
+    linear-gradient(180deg, #1b1612 0%, #090807 100%);
 }
 
 .flipTop,
@@ -238,28 +189,29 @@
   animation: flapBottom 240ms cubic-bezier(0.17, 0.84, 0.36, 1) calc(var(--flip-delay) + 180ms) both;
 }
 
-.topGlyph,
-.bottomGlyph {
+.halfGlyph {
   position: absolute;
-  inset: 0;
+  left: 0;
+  width: 100%;
+  height: 200%;
   display: flex;
+  align-items: center;
   justify-content: center;
-  font-size: clamp(0.78rem, 1.45vw, 1.42rem);
+  font-size: clamp(0.92rem, 1.48vw, 1.56rem);
   font-weight: 500;
   line-height: 1;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   text-shadow: 0 0 0.32rem rgba(0, 0, 0, 0.35);
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
-.topGlyph {
-  align-items: center;
-  transform: translateY(26%);
+.halfGlyphTop {
+  top: 0;
 }
 
-.bottomGlyph {
-  align-items: center;
-  transform: translateY(-25%);
+.halfGlyphBottom {
+  top: -100%;
 }
 
 .toneDefault {
@@ -311,29 +263,15 @@
 }
 
 @media (max-width: 860px) {
-  .metaBar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .clockBlock {
-    align-items: flex-start;
-  }
-
-  .boardFrame {
-    width: 100%;
-  }
-
   .scene {
-    place-items: start center;
+    padding: 0;
   }
 
-  .boardBody {
-    overflow-x: auto;
+  .boardSurface {
+    min-height: 100vh;
   }
 
-  .rowList,
-  .headerRow {
-    min-width: max-content;
+  .boardTopbar {
+    padding-top: 0.8rem;
   }
 }
