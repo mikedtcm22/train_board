@@ -27,7 +27,7 @@ export function FlapText({
         <FlapCell
           animated={animated}
           char={char}
-          delayMs={delayOffset + index * 18}
+          delayMs={delayOffset}
           key={`${tone}-${width}-${index}`}
           tone={tone}
         />

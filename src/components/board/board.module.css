@@ -203,11 +203,11 @@
 }
 
 .cellFlipping .flipTop {
-  animation: flapTop 260ms cubic-bezier(0.45, 0.03, 0.76, 0.43) var(--flip-delay) both;
+  animation: flapTop 16ms linear var(--flip-delay) both;
 }
 
 .cellFlipping .flipBottom {
-  animation: flapBottom 280ms cubic-bezier(0.17, 0.84, 0.36, 1) calc(var(--flip-delay) + 210ms) both;
+  animation: flapBottom 18ms linear calc(var(--flip-delay) + 10ms) both;
 }
 
 .halfGlyph {

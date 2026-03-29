@@ -1,13 +1,15 @@
-const BOARD_CHARSET = new Set([
+export const BOARD_CHARACTER_ORDER = [
   " ",
+  ...Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+  ...Array.from("0123456789"),
   "&",
   "-",
   ".",
   "/",
   ":",
-  ...Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
-  ...Array.from("0123456789"),
-]);
+] as const;
+
+const BOARD_CHARSET = new Set(BOARD_CHARACTER_ORDER);
 
 export function formatBoardText(value: string, width: number) {
   const normalized = value

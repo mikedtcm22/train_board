@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { BOARD_CHARACTER_ORDER } from "@/lib/board/format-board";
 import type { BoardTone } from "./flap-text";
 import styles from "./board.module.css";
 
@@ -11,7 +12,9 @@ type FlapCellProps = {
   tone: BoardTone;
 };
 
-const FLIP_DURATION_MS = 460;
+const STEP_INTERVAL_MS = 35;
+const STEP_SETTLE_MS = 28;
+const FULL_ROTATION_STEPS = BOARD_CHARACTER_ORDER.length;
 
 export function FlapCell({
   animated = true,
@@ -23,28 +26,63 @@ export function FlapCell({
   const [currentChar, setCurrentChar] = useState(nextChar);
   const [pendingChar, setPendingChar] = useState(nextChar);
   const [flipping, setFlipping] = useState(false);
+  const currentCharRef = useRef(nextChar);
+  const pendingCharRef = useRef(nextChar);
+  const flippingRef = useRef(false);
+  const timeoutIdsRef = useRef<number[]>([]);
 
   useEffect(() => {
-    if (nextChar === currentChar && !flipping) {
+    timeoutIdsRef.current.forEach((timeoutId) => {
+      window.clearTimeout(timeoutId);
+    });
+    timeoutIdsRef.current = [];
+
+    if (!animated) {
       return;
     }
 
-    const kickoffId = window.setTimeout(() => {
-      setPendingChar(nextChar);
-      setFlipping(true);
-    }, 0);
+    const startingChar = flippingRef.current
+      ? pendingCharRef.current
+      : currentCharRef.current;
 
-    const settleId = window.setTimeout(() => {
-      setCurrentChar(nextChar);
-      setPendingChar(nextChar);
-      setFlipping(false);
-    }, delayMs + FLIP_DURATION_MS);
+    if (nextChar === startingChar) {
+      return;
+    }
+
+    const sequence = buildFlipSequence(startingChar, nextChar);
+
+    sequence.forEach((sequenceChar, stepIndex) => {
+      const startAt = delayMs + stepIndex * STEP_INTERVAL_MS;
+      const settleAt = startAt + STEP_SETTLE_MS;
+
+      timeoutIdsRef.current.push(
+        window.setTimeout(() => {
+          pendingCharRef.current = sequenceChar;
+          flippingRef.current = true;
+          setPendingChar(sequenceChar);
+          setFlipping(true);
+        }, startAt),
+      );
+
+      timeoutIdsRef.current.push(
+        window.setTimeout(() => {
+          currentCharRef.current = sequenceChar;
+          pendingCharRef.current = sequenceChar;
+          flippingRef.current = false;
+          setCurrentChar(sequenceChar);
+          setPendingChar(sequenceChar);
+          setFlipping(false);
+        }, settleAt),
+      );
+    });
 
     return () => {
-      window.clearTimeout(kickoffId);
-      window.clearTimeout(settleId);
+      timeoutIdsRef.current.forEach((timeoutId) => {
+        window.clearTimeout(timeoutId);
+      });
+      timeoutIdsRef.current = [];
     };
-  }, [animated, currentChar, delayMs, flipping, nextChar]);
+  }, [animated, delayMs, nextChar]);
 
   const toneClass = styles[`tone${capitalize(tone)}`];
   const visibleCurrentChar = animated ? currentChar : nextChar;
@@ -88,4 +126,19 @@ export function FlapCell({
 
 function capitalize(value: string) {
   return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
+}
+
+function buildFlipSequence(fromChar: string, toChar: string) {
+  const safeFromChar = BOARD_CHARACTER_ORDER.includes(fromChar as never) ? fromChar : " ";
+  const safeToChar = BOARD_CHARACTER_ORDER.includes(toChar as never) ? toChar : " ";
+  const fromIndex = BOARD_CHARACTER_ORDER.indexOf(safeFromChar as (typeof BOARD_CHARACTER_ORDER)[number]);
+  const toIndex = BOARD_CHARACTER_ORDER.indexOf(safeToChar as (typeof BOARD_CHARACTER_ORDER)[number]);
+  const forwardDistance =
+    (toIndex - fromIndex + BOARD_CHARACTER_ORDER.length) % BOARD_CHARACTER_ORDER.length;
+  const totalSteps = FULL_ROTATION_STEPS + forwardDistance;
+
+  return Array.from({ length: totalSteps }, (_, stepIndex) => {
+    const nextIndex = (fromIndex + stepIndex + 1) % BOARD_CHARACTER_ORDER.length;
+    return BOARD_CHARACTER_ORDER[nextIndex];
+  });
 }
