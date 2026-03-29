@@ -3,8 +3,27 @@
   min-height: 100vh;
   display: grid;
   place-items: stretch;
-  padding: clamp(0.6rem, 1.2vw, 1.1rem);
+  padding: clamp(0.25rem, 0.7vw, 0.65rem);
   overflow: hidden;
+}
+
+.fullscreenToggle {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.7rem;
+  z-index: 12;
+  border: 0;
+  background: transparent;
+  color: rgba(248, 237, 207, 0.68);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 120ms ease, opacity 120ms ease;
+}
+
+.fullscreenToggle:hover {
+  color: rgba(248, 237, 207, 0.92);
 }
 
 .boardSurface {
@@ -26,7 +45,7 @@
   display: flex;
   justify-content: space-between;
   align-items: start;
-  padding: clamp(0.95rem, 1.8vw, 1.45rem) clamp(1rem, 2vw, 1.7rem) 0;
+  padding: clamp(0.8rem, 1.4vw, 1.2rem) clamp(0.55rem, 1vw, 1rem) 0;
 }
 
 .topbarSpacer {
@@ -45,7 +64,9 @@
 }
 
 .boardGrid {
-  padding: 0 clamp(1rem, 2vw, 1.7rem) clamp(1rem, 2vw, 1.5rem);
+  display: grid;
+  justify-content: center;
+  padding: 0 clamp(0.55rem, 1vw, 1rem) clamp(0.7rem, 1.25vw, 1rem);
   overflow-x: auto;
 }
 
@@ -61,11 +82,11 @@
     max-content
     max-content;
   align-items: center;
-  gap: clamp(0.28rem, 0.72vw, 0.56rem);
+  gap: clamp(0.16rem, 0.45vw, 0.36rem);
 }
 
 .headerRow {
-  padding-bottom: 0.7rem;
+  padding-bottom: 0.55rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -80,19 +101,19 @@
 
 .rowList {
   display: grid;
-  gap: 0.7rem;
-  margin-top: 0.75rem;
+  gap: 0.48rem;
+  margin-top: 0.55rem;
   width: max-content;
 }
 
 .boardRow {
-  padding: 0.12rem 0;
+  padding: 0.06rem 0;
 }
 
 .rowMarker {
   display: block;
   width: 0.32rem;
-  min-height: 2.65rem;
+  min-height: 2.92rem;
   border-radius: 999px;
   box-shadow: 0 0 22px currentColor;
 }
@@ -103,14 +124,14 @@
 
 .fieldCells {
   display: inline-flex;
-  gap: 0.1rem;
+  gap: 0.06rem;
 }
 
 .cell {
   --cell-color: #f7edd2;
   --flip-delay: 0ms;
-  --cell-height: clamp(1.58rem, 2.52vw, 2.42rem);
-  --cell-width: clamp(0.58rem, 0.96vw, 0.92rem);
+  --cell-height: clamp(1.78rem, 2.7vw, 2.68rem);
+  --cell-width: clamp(0.68rem, 1.04vw, 1.08rem);
   position: relative;
   width: var(--cell-width);
   height: var(--cell-height);
@@ -182,11 +203,11 @@
 }
 
 .cellFlipping .flipTop {
-  animation: flapTop 220ms cubic-bezier(0.45, 0.03, 0.76, 0.43) var(--flip-delay) both;
+  animation: flapTop 260ms cubic-bezier(0.45, 0.03, 0.76, 0.43) var(--flip-delay) both;
 }
 
 .cellFlipping .flipBottom {
-  animation: flapBottom 240ms cubic-bezier(0.17, 0.84, 0.36, 1) calc(var(--flip-delay) + 180ms) both;
+  animation: flapBottom 280ms cubic-bezier(0.17, 0.84, 0.36, 1) calc(var(--flip-delay) + 210ms) both;
 }
 
 .halfGlyph {
@@ -197,7 +218,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(0.92rem, 1.48vw, 1.56rem);
+  font-size: clamp(1rem, 1.58vw, 1.76rem);
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0.02em;
@@ -265,6 +286,11 @@
 @media (max-width: 860px) {
   .scene {
     padding: 0;
+  }
+
+  .fullscreenToggle {
+    top: 0.85rem;
+    left: 0.9rem;
   }
 
   .boardSurface {

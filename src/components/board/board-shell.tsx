@@ -6,6 +6,8 @@ import styles from "./board.module.css";
 type BoardShellProps = {
   currentDateLabel: string;
   currentTimeLabel: string;
+  isFullscreen: boolean;
+  onFullscreenToggle: () => void;
   snapshot: BoardSnapshot;
 };
 
@@ -20,10 +22,15 @@ const HEADER_FIELDS = [
 export function BoardShell({
   currentDateLabel,
   currentTimeLabel,
+  isFullscreen,
+  onFullscreenToggle,
   snapshot,
 }: BoardShellProps) {
   return (
     <main className={styles.scene}>
+      <button className={styles.fullscreenToggle} onClick={onFullscreenToggle} type="button">
+        {isFullscreen ? "Exit Full Screen" : "Full Screen"}
+      </button>
       <section className={styles.boardSurface}>
         <div className={styles.boardTopbar}>
           <div className={styles.topbarSpacer} />
@@ -63,7 +70,7 @@ export function BoardShell({
 
           <div className={styles.rowList}>
             {snapshot.rows.map((row, rowIndex) => (
-              <BoardRow key={`${row.id}-${rowIndex}`} row={row} rowIndex={rowIndex} />
+              <BoardRow key={rowIndex} row={row} rowIndex={rowIndex} />
             ))}
           </div>
         </div>

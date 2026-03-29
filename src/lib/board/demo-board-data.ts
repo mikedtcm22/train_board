@@ -1,12 +1,14 @@
 export const BOARD_FIELD_WIDTHS = {
   date: 6,
-  name: 32,
+  name: 54,
   start: 5,
   end: 5,
   status: 13,
 } as const;
 
-export type UserTone = "amber" | "sky" | "mint" | "coral";
+export const DEMO_ROW_COUNT = 6;
+
+export type UserTone = "default" | "amber" | "sky" | "mint" | "coral";
 
 export type BoardRowData = {
   id: string;
@@ -21,6 +23,22 @@ export type BoardRowData = {
 export type BoardSnapshot = {
   rows: BoardRowData[];
 };
+
+export function createEmptyRow(slot: number): BoardRowData {
+  return {
+    id: `empty-${slot}`,
+    date: "",
+    name: "",
+    start: "",
+    end: "",
+    status: "",
+    tone: "default",
+  };
+}
+
+export function padBoardRows(rows: BoardRowData[]) {
+  return Array.from({ length: DEMO_ROW_COUNT }, (_, index) => rows[index] ?? createEmptyRow(index));
+}
 
 export const demoSnapshots: BoardSnapshot[] = [
   {

@@ -2,10 +2,12 @@ import { formatBoardText } from "@/lib/board/format-board";
 import { FlapCell } from "./flap-cell";
 import styles from "./board.module.css";
 
+export type BoardTone = "default" | "header" | "amber" | "sky" | "mint" | "coral";
+
 type FlapTextProps = {
   animated?: boolean;
   delayOffset?: number;
-  tone: "default" | "header" | "amber" | "sky" | "mint" | "coral";
+  tone: BoardTone;
   value: string;
   width: number;
 };

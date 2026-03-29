@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { BoardTone } from "./flap-text";
 import styles from "./board.module.css";
 
 type FlapCellProps = {
   animated?: boolean;
   char: string;
   delayMs: number;
-  tone: "default" | "header" | "amber" | "sky" | "mint" | "coral";
+  tone: BoardTone;
 };
 
 const FLIP_DURATION_MS = 460;
