@@ -24,3 +24,5 @@ npm run dev
 ```
 
 Then open `http://localhost:3000/display`.
+
+For local development, the default `dev` script uses webpack mode instead of Turbopack. This avoids a Turbopack client-manifest bug that intermittently broke `/display` during live development. If you want to test Turbopack anyway, use `npm run dev:turbo`.
