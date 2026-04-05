@@ -9,12 +9,25 @@ Digital household calendar display styled like a split-flap train station board.
 
 ## Status
 
-Phase 1 is now underway. The repository includes a static Next.js prototype with:
+Milestone 1 is complete. The repository now includes a polished static Phase 1 prototype with:
 
 - a full-screen `/display` route
-- a split-flap board UI with animated character changes
+- a split-flap board UI with analog-inspired styling
+- ordered multi-step split-flap character cycling
+- static signboard headers and row separators
+- seven visible event rows tuned for distance readability
 - rotating mock family calendar states to exercise the animation system
+- fullscreen mode for kiosk-style display testing
 - a placeholder `/admin` route reserved for future settings work
+
+## Next Milestone
+
+Milestone 2 is Google Calendar integration:
+
+- connect one shared Google Calendar
+- normalize live events into board rows
+- replace demo snapshots with server-driven display payloads
+- preserve the current board styling and animation model while wiring live data
 
 ## Local Development
 

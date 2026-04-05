@@ -1,5 +1,22 @@
 # Train Board Technical Implementation Plan
 
+## Current Project State
+
+Milestone 1 is complete.
+
+Implemented in the current prototype:
+
+- hosted Next.js app structure with `/display` and `/admin`
+- analog-inspired split-flap board styling
+- static header row with non-flap labels
+- seven visible board rows
+- fullscreen toggle for kiosk-style preview
+- rotating mock event data
+- ordered forward-only character cycling for changed tiles
+- in-place animation for tone-changing fields such as event name and status
+
+Milestone 2 should begin from the current prototype rather than reworking the display design. The board layout, row structure, tile sizing, and current animation model should be treated as the baseline unless live data integration exposes a concrete issue.
+
 ## 1. Objective
 
 Build a hosted web application that reads a single shared Google Calendar and renders a fixed-layout split-flap board display suitable for a wall-mounted 24" monitor, with a separate web admin interface for configuration.
@@ -343,6 +360,12 @@ Exit criteria:
 
 - the board looks good enough to validate the overall concept
 - motion is believable and not janky
+
+Status:
+
+- completed
+- current prototype uses seven visible rows, static signboard headers, and analog-styled split-flap tiles
+- local development defaults to webpack mode because Turbopack showed intermittent client-manifest issues during dev
 
 ### Milestone 2: Live Calendar Data
 
