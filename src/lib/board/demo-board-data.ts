@@ -1,12 +1,12 @@
 export const BOARD_FIELD_WIDTHS = {
   date: 6,
-  name: 33,
+  name: 31,
   start: 5,
   end: 5,
   status: 13,
 } as const;
 
-export const DEMO_ROW_COUNT = 6;
+export const DEMO_ROW_COUNT = 7;
 
 export type UserTone = "default" | "amber" | "sky" | "mint" | "coral";
 
@@ -97,6 +97,15 @@ export const demoSnapshots: BoardSnapshot[] = [
         status: "",
         tone: "coral",
       },
+      {
+        id: "airport",
+        date: "MAR 29",
+        name: "AIRPORT RUN TERMINAL B",
+        start: "08:00",
+        end: "09:10",
+        status: "",
+        tone: "sky",
+      },
     ],
   },
   {
@@ -155,6 +164,15 @@ export const demoSnapshots: BoardSnapshot[] = [
         status: "",
         tone: "coral",
       },
+      {
+        id: "airport",
+        date: "MAR 29",
+        name: "AIRPORT RUN TERMINAL B",
+        start: "08:00",
+        end: "09:10",
+        status: "",
+        tone: "sky",
+      },
     ],
   },
   {
@@ -212,6 +230,15 @@ export const demoSnapshots: BoardSnapshot[] = [
         end: "09:10",
         status: "",
         tone: "sky",
+      },
+      {
+        id: "museum",
+        date: "MAR 29",
+        name: "MUSEUM DAY WITH KIDS",
+        start: "10:30",
+        end: "12:00",
+        status: "",
+        tone: "amber",
       },
     ],
   },
