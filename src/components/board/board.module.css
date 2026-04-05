@@ -14,7 +14,7 @@
   z-index: 12;
   border: 0;
   background: transparent;
-  color: rgba(248, 237, 207, 0.68);
+  color: rgba(239, 242, 238, 0.74);
   font-size: 0.72rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -23,7 +23,7 @@
 }
 
 .fullscreenToggle:hover {
-  color: rgba(248, 237, 207, 0.92);
+  color: rgba(248, 250, 247, 0.96);
 }
 
 .boardSurface {
@@ -32,12 +32,18 @@
   display: grid;
   grid-template-rows: auto 1fr;
   background:
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.025), transparent 20%),
-    linear-gradient(180deg, #17110d 0%, #0b0908 100%);
-  border: 1px solid rgba(255, 230, 178, 0.05);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 14%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.018) 0 1px,
+      transparent 1px 22px
+    ),
+    linear-gradient(180deg, #69717c 0%, #505760 10%, #343940 24%, #24282d 100%);
+  border: 1px solid rgba(245, 248, 250, 0.1);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.72);
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.38),
+    0 14px 34px rgba(0, 0, 0, 0.28);
   overflow: hidden;
 }
 
@@ -87,7 +93,7 @@
 
 .headerRow {
   padding-bottom: 0.55rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.11);
 }
 
 .headerMarker {
@@ -96,7 +102,7 @@
   height: 100%;
   min-height: 2.45rem;
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(248, 221, 164, 0.9), rgba(149, 100, 41, 0.65));
+  background: linear-gradient(180deg, rgba(246, 249, 252, 0.85), rgba(128, 138, 149, 0.7));
 }
 
 .rowList {
@@ -115,7 +121,10 @@
   width: 0.32rem;
   min-height: 2.92rem;
   border-radius: 999px;
-  box-shadow: 0 0 22px currentColor;
+  background: var(--marker-color, rgba(236, 241, 235, 0.42));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.28);
 }
 
 .field {
@@ -128,21 +137,37 @@
 }
 
 .cell {
-  --cell-color: #f7edd2;
+  --cell-color: #f1f3ee;
+  --marker-color: rgba(241, 243, 238, 0.42);
   --flip-delay: 0ms;
   --cell-height: clamp(1.78rem, 2.7vw, 2.68rem);
   --cell-width: clamp(0.68rem, 1.04vw, 1.08rem);
   position: relative;
   width: var(--cell-width);
   height: var(--cell-height);
-  border-radius: 0.16rem;
-  perspective: 620px;
+  border-radius: 0.06rem;
+  perspective: 980px;
   color: var(--cell-color);
-  background: linear-gradient(180deg, #342821 0%, #120f0d 100%);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 18%),
+    linear-gradient(180deg, #2e343a 0%, #13171a 100%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.62),
-    0 0.2rem 0.52rem rgba(0, 0, 0, 0.28);
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(0, 0, 0, 0.34),
+    0 0.15rem 0.28rem rgba(0, 0, 0, 0.22);
+}
+
+.cell::before {
+  content: "";
+  position: absolute;
+  inset: 0.08rem 0.1rem;
+  border-radius: 0.03rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 35%),
+    linear-gradient(180deg, transparent 60%, rgba(0, 0, 0, 0.14));
+  z-index: 0;
+  pointer-events: none;
 }
 
 .cell::after {
@@ -152,8 +177,8 @@
   right: 0;
   top: calc(50% - 0.05rem);
   height: 0.11rem;
-  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.76), transparent);
-  z-index: 5;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.78), rgba(255, 255, 255, 0.04));
+  z-index: 6;
 }
 
 .cellTop,
@@ -165,32 +190,35 @@
   width: 100%;
   height: 50%;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.028);
+  border: 1px solid rgba(255, 255, 255, 0.018);
   backface-visibility: hidden;
+  z-index: 2;
 }
 
 .cellTop,
 .flipTop {
   top: 0;
-  border-radius: 0.16rem 0.16rem 0.08rem 0.08rem;
+  border-radius: 0.06rem 0.06rem 0.025rem 0.025rem;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 56%),
-    linear-gradient(180deg, #3c2f28 0%, #1e1713 100%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent 44%),
+    linear-gradient(180deg, #30363c 0%, #1b2025 100%);
 }
 
 .cellBottom,
 .flipBottom {
   bottom: 0;
-  border-radius: 0.08rem 0.08rem 0.16rem 0.16rem;
+  border-radius: 0.025rem 0.025rem 0.06rem 0.06rem;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 48%),
-    linear-gradient(180deg, #1b1612 0%, #090807 100%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 42%),
+    linear-gradient(180deg, #181d22 0%, #0b0e10 100%);
 }
 
 .flipTop,
 .flipBottom {
   z-index: 7;
-  box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.36);
+  box-shadow:
+    0 0.2rem 0.55rem rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .flipTop {
@@ -203,11 +231,11 @@
 }
 
 .cellFlipping .flipTop {
-  animation: flapTop 16ms linear var(--flip-delay) both;
+  animation: flapTop 44ms cubic-bezier(0.56, 0.03, 0.88, 0.34) var(--flip-delay) both;
 }
 
 .cellFlipping .flipBottom {
-  animation: flapBottom 18ms linear calc(var(--flip-delay) + 10ms) both;
+  animation: flapBottom 48ms cubic-bezier(0.16, 0.83, 0.32, 1) calc(var(--flip-delay) + 24ms) both;
 }
 
 .halfGlyph {
@@ -218,12 +246,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(1rem, 1.58vw, 1.76rem);
-  font-weight: 500;
+  font-size: clamp(1rem, 1.56vw, 1.72rem);
+  font-weight: 600;
   line-height: 1;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   text-transform: uppercase;
-  text-shadow: 0 0 0.32rem rgba(0, 0, 0, 0.35);
+  text-shadow: 0 0 0.12rem rgba(0, 0, 0, 0.18);
   font-variant-numeric: tabular-nums lining-nums;
 }
 
@@ -236,27 +264,33 @@
 }
 
 .toneDefault {
-  --cell-color: #f7edd2;
+  --cell-color: #edf0eb;
+  --marker-color: rgba(237, 240, 235, 0.48);
 }
 
 .toneHeader {
-  --cell-color: #edcf92;
+  --cell-color: #f4f6f2;
+  --marker-color: rgba(244, 246, 242, 0.5);
 }
 
 .toneAmber {
-  --cell-color: #ffd27d;
+  --cell-color: #d9ca73;
+  --marker-color: rgba(217, 202, 115, 0.5);
 }
 
 .toneSky {
-  --cell-color: #7fd9ff;
+  --cell-color: #d8e0e7;
+  --marker-color: rgba(216, 224, 231, 0.5);
 }
 
 .toneMint {
-  --cell-color: #91f2c6;
+  --cell-color: #d8e0d8;
+  --marker-color: rgba(216, 224, 216, 0.5);
 }
 
 .toneCoral {
-  --cell-color: #ff9a77;
+  --cell-color: #e3d1c1;
+  --marker-color: rgba(227, 209, 193, 0.5);
 }
 
 @keyframes flapTop {
@@ -266,15 +300,15 @@
   }
 
   100% {
-    transform: rotateX(-92deg);
-    filter: brightness(0.72);
+    transform: rotateX(-104deg);
+    filter: brightness(0.64);
   }
 }
 
 @keyframes flapBottom {
   0% {
     transform: rotateX(90deg);
-    filter: brightness(0.65);
+    filter: brightness(0.56);
   }
 
   100% {

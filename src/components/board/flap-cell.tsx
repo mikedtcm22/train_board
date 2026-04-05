@@ -12,9 +12,8 @@ type FlapCellProps = {
   tone: BoardTone;
 };
 
-const STEP_INTERVAL_MS = 35;
-const STEP_SETTLE_MS = 28;
-const FULL_ROTATION_STEPS = BOARD_CHARACTER_ORDER.length;
+const STEP_INTERVAL_MS = 82;
+const STEP_SETTLE_MS = 74;
 
 export function FlapCell({
   animated = true,
@@ -154,7 +153,7 @@ function buildFlipSequence(fromChar: string, toChar: string) {
   const toIndex = BOARD_CHARACTER_ORDER.indexOf(safeToChar as (typeof BOARD_CHARACTER_ORDER)[number]);
   const forwardDistance =
     (toIndex - fromIndex + BOARD_CHARACTER_ORDER.length) % BOARD_CHARACTER_ORDER.length;
-  const totalSteps = FULL_ROTATION_STEPS + forwardDistance;
+  const totalSteps = forwardDistance;
 
   return Array.from({ length: totalSteps }, (_, stepIndex) => {
     const nextIndex = (fromIndex + stepIndex + 1) % BOARD_CHARACTER_ORDER.length;
