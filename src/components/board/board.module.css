@@ -49,18 +49,17 @@
 
 .boardTopbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: start;
-  padding: clamp(0.8rem, 1.4vw, 1.2rem) clamp(0.55rem, 1vw, 1rem) 0;
-}
-
-.topbarSpacer {
-  min-height: 0.1rem;
+  padding:
+    clamp(0.35rem, 0.7vw, 0.58rem)
+    clamp(0.45rem, 0.9vw, 0.82rem)
+    clamp(0.12rem, 0.3vw, 0.22rem);
 }
 
 .nowPanel {
   display: grid;
-  gap: 0.2rem;
+  gap: 0.12rem;
   justify-items: end;
 }
 
@@ -71,8 +70,12 @@
 
 .boardGrid {
   display: grid;
+  align-content: start;
   justify-content: center;
-  padding: 0 clamp(0.55rem, 1vw, 1rem) clamp(0.7rem, 1.25vw, 1rem);
+  padding:
+    0
+    clamp(0.45rem, 0.9vw, 0.82rem)
+    clamp(0.55rem, 0.95vw, 0.82rem);
   overflow-x: auto;
 }
 
@@ -88,11 +91,11 @@
     max-content
     max-content;
   align-items: center;
-  gap: clamp(0.16rem, 0.45vw, 0.36rem);
+  gap: clamp(0.14rem, 0.35vw, 0.28rem);
 }
 
 .headerRow {
-  padding-bottom: 0.55rem;
+  padding-bottom: 0.48rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.11);
 }
 
@@ -100,26 +103,26 @@
   display: block;
   width: 0.32rem;
   height: 100%;
-  min-height: 2.45rem;
+  min-height: 3.28rem;
   border-radius: 999px;
   background: linear-gradient(180deg, rgba(246, 249, 252, 0.85), rgba(128, 138, 149, 0.7));
 }
 
 .rowList {
   display: grid;
-  gap: 0.48rem;
-  margin-top: 0.55rem;
+  gap: 0.58rem;
+  margin-top: 0.48rem;
   width: max-content;
 }
 
 .boardRow {
-  padding: 0.06rem 0;
+  padding: 0.04rem 0;
 }
 
 .rowMarker {
   display: block;
   width: 0.32rem;
-  min-height: 2.92rem;
+  min-height: 3.84rem;
   border-radius: 999px;
   background: var(--marker-color, rgba(236, 241, 235, 0.42));
   box-shadow:
@@ -133,15 +136,15 @@
 
 .fieldCells {
   display: inline-flex;
-  gap: 0.06rem;
+  gap: 0.05rem;
 }
 
 .cell {
   --cell-color: #f1f3ee;
   --marker-color: rgba(241, 243, 238, 0.42);
   --flip-delay: 0ms;
-  --cell-height: clamp(1.78rem, 2.7vw, 2.68rem);
-  --cell-width: clamp(0.68rem, 1.04vw, 1.08rem);
+  --cell-height: clamp(2.18rem, 3.24vw, 3.36rem);
+  --cell-width: clamp(0.86rem, 1.26vw, 1.34rem);
   position: relative;
   width: var(--cell-width);
   height: var(--cell-height);
@@ -161,7 +164,7 @@
 .cell::before {
   content: "";
   position: absolute;
-  inset: 0.08rem 0.1rem;
+  inset: 0.1rem 0.12rem;
   border-radius: 0.03rem;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 35%),
@@ -246,7 +249,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(1rem, 1.56vw, 1.72rem);
+  font-size: clamp(1.28rem, 1.94vw, 2.22rem);
   font-weight: 600;
   line-height: 1;
   letter-spacing: 0.01em;
@@ -332,6 +335,6 @@
   }
 
   .boardTopbar {
-    padding-top: 0.8rem;
+    padding-top: 0.48rem;
   }
 }

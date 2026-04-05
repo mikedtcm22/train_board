@@ -33,7 +33,6 @@ export function BoardShell({
       </button>
       <section className={styles.boardSurface}>
         <div className={styles.boardTopbar}>
-          <div className={styles.topbarSpacer} />
           <div className={styles.nowPanel}>
             <div className={styles.nowStack}>
               <FlapText
