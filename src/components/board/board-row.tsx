@@ -1,5 +1,5 @@
-import type { BoardRowData } from "@/lib/board/demo-board-data";
-import { BOARD_FIELD_WIDTHS } from "@/lib/board/demo-board-data";
+import type { BoardRowData } from "@/lib/board/board-data";
+import { BOARD_FIELD_WIDTHS } from "@/lib/board/board-data";
 import { FlapText } from "./flap-text";
 import styles from "./board.module.css";
 

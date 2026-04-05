@@ -20,14 +20,37 @@ Milestone 1 is complete. The repository now includes a polished static Phase 1 p
 - fullscreen mode for kiosk-style display testing
 - a placeholder `/admin` route reserved for future settings work
 
-## Next Milestone
+## Milestone 2 Progress
 
-Milestone 2 is Google Calendar integration:
+The board now has a live data path:
 
-- connect one shared Google Calendar
-- normalize live events into board rows
-- replace demo snapshots with server-driven display payloads
-- preserve the current board styling and animation model while wiring live data
+- `/display` renders from a server-generated board payload
+- `/api/display` returns normalized rows for the board client to poll
+- Google Calendar fetching is wired server-side through OAuth refresh tokens
+- recurring events are expanded through Google Calendar `singleEvents=true`
+- missing calendar credentials fall back to demo mode instead of breaking the display
+- `/admin` shows the current integration status and required environment variables
+
+Remaining Milestone 2 work is primarily real-calendar setup and validation against your actual household calendar data.
+
+## Environment Setup
+
+Copy `.env.example` to `.env.local` and fill in:
+
+```bash
+GOOGLE_CALENDAR_ID=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REFRESH_TOKEN=
+GOOGLE_CALENDAR_TIME_ZONE=America/Chicago
+BOARD_USER_TONES=parent1@example.com=sky,parent2@example.com=amber
+```
+
+Optional knobs:
+
+- `BOARD_STARTING_SOON_MINUTES`
+- `BOARD_ALMOST_OVER_MINUTES`
+- `GOOGLE_CALENDAR_MAX_RESULTS`
 
 ## Local Development
 

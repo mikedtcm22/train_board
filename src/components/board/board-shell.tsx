@@ -1,4 +1,4 @@
-import { BOARD_FIELD_WIDTHS, type BoardSnapshot } from "@/lib/board/demo-board-data";
+import { BOARD_FIELD_WIDTHS, type BoardSnapshot } from "@/lib/board/board-data";
 import { BoardRow } from "./board-row";
 import { FlapText } from "./flap-text";
 import styles from "./board.module.css";

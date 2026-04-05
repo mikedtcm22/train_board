@@ -1,44 +1,4 @@
-export const BOARD_FIELD_WIDTHS = {
-  date: 6,
-  name: 31,
-  start: 5,
-  end: 5,
-  status: 13,
-} as const;
-
-export const DEMO_ROW_COUNT = 7;
-
-export type UserTone = "default" | "amber" | "sky" | "mint" | "coral";
-
-export type BoardRowData = {
-  id: string;
-  date: string;
-  name: string;
-  start: string;
-  end: string;
-  status: string;
-  tone: UserTone;
-};
-
-export type BoardSnapshot = {
-  rows: BoardRowData[];
-};
-
-export function createEmptyRow(slot: number): BoardRowData {
-  return {
-    id: `empty-${slot}`,
-    date: "",
-    name: "",
-    start: "",
-    end: "",
-    status: "",
-    tone: "default",
-  };
-}
-
-export function padBoardRows(rows: BoardRowData[]) {
-  return Array.from({ length: DEMO_ROW_COUNT }, (_, index) => rows[index] ?? createEmptyRow(index));
-}
+import type { BoardSnapshot } from "./board-data";
 
 export const demoSnapshots: BoardSnapshot[] = [
   {

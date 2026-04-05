@@ -1,23 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { DEMO_ROW_COUNT, padBoardRows } from "@/lib/board/board-data";
-import {
-  demoSnapshots,
-} from "@/lib/board/demo-board-data";
+import { useEffect, useRef, useState } from "react";
+import { padBoardRows, type BoardDisplayPayload } from "@/lib/board/board-data";
 import { BoardShell } from "./board-shell";
 
-const DEMO_HOLD_MS = 3800;
-const DEMO_ROW_STEP_MS = 740;
-const CLOCK_UPDATE_MS = 1000 * 30;
+const CLOCK_UPDATE_MS = 30_000;
 
-export function BoardDemo() {
-  const [snapshotIndex, setSnapshotIndex] = useState(0);
+type BoardDisplayProps = {
+  initialPayload: BoardDisplayPayload;
+};
+
+export function BoardDisplay({ initialPayload }: BoardDisplayProps) {
+  const [payload, setPayload] = useState(initialPayload);
   const [displayedRows, setDisplayedRows] = useState(() =>
-    padBoardRows(demoSnapshots[0].rows),
+    padBoardRows(initialPayload.rows),
   );
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [now, setNow] = useState(() => new Date());
+  const payloadRef = useRef(payload);
+
+  useEffect(() => {
+    payloadRef.current = payload;
+  }, [payload]);
 
   const toggleFullscreen = async () => {
     if (document.fullscreenElement) {
@@ -41,36 +45,38 @@ export function BoardDemo() {
   }, []);
 
   useEffect(() => {
-    const nextSnapshotIndex = (snapshotIndex + 1) % demoSnapshots.length;
-    const nextRows = padBoardRows(demoSnapshots[nextSnapshotIndex].rows);
-    const timeoutIds: number[] = [];
+    const refreshBoard = async () => {
+      try {
+        const response = await fetch("/api/display", {
+          cache: "no-store",
+        });
 
-    timeoutIds.push(
-      window.setTimeout(() => {
-        for (let rowIndex = 0; rowIndex < DEMO_ROW_COUNT; rowIndex += 1) {
-          timeoutIds.push(
-            window.setTimeout(() => {
-              setDisplayedRows((currentRows) => {
-                const updatedRows = [...currentRows];
-                updatedRows[rowIndex] = nextRows[rowIndex];
-                return updatedRows;
-              });
-            }, rowIndex * DEMO_ROW_STEP_MS),
-          );
+        if (!response.ok) {
+          return;
         }
 
-        timeoutIds.push(
-          window.setTimeout(() => {
-            setSnapshotIndex(nextSnapshotIndex);
-          }, DEMO_ROW_COUNT * DEMO_ROW_STEP_MS),
-        );
-      }, DEMO_HOLD_MS),
-    );
+        const nextPayload = (await response.json()) as BoardDisplayPayload;
+        const currentPayload = payloadRef.current;
+        const rowsChanged =
+          nextPayload.version !== currentPayload.version ||
+          nextPayload.mode !== currentPayload.mode;
+
+        setPayload(nextPayload);
+
+        if (rowsChanged) {
+          setDisplayedRows(padBoardRows(nextPayload.rows));
+        }
+      } catch {
+        // Keep rendering the current board state if a poll fails.
+      }
+    };
+
+    const intervalId = window.setInterval(refreshBoard, payload.pollIntervalMs);
 
     return () => {
-      timeoutIds.forEach((timeoutId) => window.clearTimeout(timeoutId));
+      window.clearInterval(intervalId);
     };
-  }, [snapshotIndex]);
+  }, [payload.pollIntervalMs]);
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -83,8 +89,8 @@ export function BoardDemo() {
   }, []);
 
   const currentDateLabel = new Intl.DateTimeFormat("en-US", {
-    month: "short",
     day: "2-digit",
+    month: "short",
     weekday: "short",
   })
     .format(now)
@@ -93,8 +99,8 @@ export function BoardDemo() {
 
   const currentTimeLabel = new Intl.DateTimeFormat("en-US", {
     hour: "2-digit",
-    minute: "2-digit",
     hour12: true,
+    minute: "2-digit",
   }).format(now);
 
   return (
