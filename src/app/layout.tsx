@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
+import { Archivo } from "next/font/google";
 import { Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 
 const barlowCondensed = Barlow_Condensed({
   variable: "--font-display",
   weight: ["500", "600", "700"],
+  subsets: ["latin"],
+});
+
+const archivo = Archivo({
+  variable: "--font-header",
+  weight: ["600", "700"],
   subsets: ["latin"],
 });
 
@@ -19,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={barlowCondensed.variable}>
+    <html lang="en" className={`${barlowCondensed.variable} ${archivo.variable}`}>
       <body>{children}</body>
     </html>
   );

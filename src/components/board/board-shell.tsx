@@ -56,13 +56,17 @@ export function BoardShell({
           <div className={styles.headerRow}>
             <span className={styles.headerMarker} aria-hidden="true" />
             {HEADER_FIELDS.map((field) => (
-              <div className={styles.field} key={field.label}>
-                <FlapText
-                  animated={false}
-                  tone="header"
-                  value={field.label}
-                  width={field.width}
-                />
+              <div
+                className={styles.headerTextField}
+                key={field.label}
+                style={{
+                  width: `calc(${field.width} * var(--board-cell-width) + ${Math.max(
+                    field.width - 1,
+                    0,
+                  )} * var(--board-cell-gap))`,
+                }}
+              >
+                <span className={styles.headerLabel}>{field.label}</span>
               </div>
             ))}
           </div>
