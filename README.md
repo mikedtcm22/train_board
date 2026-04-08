@@ -9,7 +9,9 @@ Digital household calendar display styled like a split-flap train station board.
 
 ## Status
 
-Milestone 1 is complete. The repository now includes a polished static Phase 1 prototype with:
+Milestones 1 and 2 are complete.
+
+Milestone 1 delivered the board prototype:
 
 - a full-screen `/display` route
 - a split-flap board UI with analog-inspired styling
@@ -20,18 +22,24 @@ Milestone 1 is complete. The repository now includes a polished static Phase 1 p
 - fullscreen mode for kiosk-style display testing
 - a placeholder `/admin` route reserved for future settings work
 
-## Milestone 2 Progress
-
-The board now has a live data path:
+Milestone 2 delivered live calendar integration:
 
 - `/display` renders from a server-generated board payload
 - `/api/display` returns normalized rows for the board client to poll
 - Google Calendar fetching is wired server-side through OAuth refresh tokens
 - recurring events are expanded through Google Calendar `singleEvents=true`
-- missing calendar credentials fall back to demo mode instead of breaking the display
+- the display is now validated against a real shared Google Calendar
+- event title-only descriptions, Central time formatting, and tuned column spacing are in place
+- missing calendar credentials still fall back to demo mode instead of breaking the display
 - `/admin` shows the current integration status and required environment variables
 
-Remaining Milestone 2 work is primarily real-calendar setup and validation against your actual household calendar data.
+## Next Milestone
+
+Milestone 3 is admin configuration:
+
+- build a real settings UI instead of a setup/status placeholder
+- persist theme selection, user color mappings, and board thresholds
+- add an admin preview workflow so display changes can be reviewed before saving
 
 ## Environment Setup
 

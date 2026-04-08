@@ -94,7 +94,7 @@
     max-content
     max-content;
   align-items: center;
-  gap: clamp(0.14rem, 0.35vw, 0.28rem);
+  gap: clamp(0.34rem, 0.72vw, 0.58rem);
 }
 
 .headerRow {

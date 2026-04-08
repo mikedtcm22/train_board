@@ -143,7 +143,7 @@ export async function listGoogleCalendarEvents(now = new Date()) {
       .map(parseGoogleCalendarEvent)
       .filter((event): event is GoogleCalendarEventRecord => event !== null),
     startingSoonMinutes: config.startingSoonMinutes,
-    timeZone: payload.timeZone ?? config.timeZone ?? "UTC",
+    timeZone: config.timeZone ?? payload.timeZone ?? "UTC",
     toneMappings: config.toneMappings,
   };
 }

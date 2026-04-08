@@ -1,6 +1,6 @@
 export const BOARD_FIELD_WIDTHS = {
   date: 6,
-  name: 31,
+  name: 28,
   start: 5,
   end: 5,
   status: 13,

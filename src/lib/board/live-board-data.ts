@@ -55,7 +55,7 @@ export function buildBoardRowsFromCalendarEvents({
         date: formatBoardDate(event.start, timeZone),
         end: event.isAllDay ? "" : formatBoardTime(event.end, timeZone),
         id: event.id,
-        name: buildDescription(event.summary, event.location),
+        name: buildDescription(event.summary),
         start: event.isAllDay ? "ALLDY" : formatBoardTime(event.start, timeZone),
         status,
         tone: resolveUserTone(event.creatorEmail, toneMappings),
@@ -63,15 +63,8 @@ export function buildBoardRowsFromCalendarEvents({
     });
 }
 
-function buildDescription(summary: string, location: string) {
-  const trimmedSummary = summary.trim() || "UNTITLED EVENT";
-  const trimmedLocation = location.trim();
-
-  if (!trimmedLocation) {
-    return trimmedSummary;
-  }
-
-  return `${trimmedSummary} AT ${trimmedLocation}`;
+function buildDescription(summary: string) {
+  return summary.trim() || "UNTITLED EVENT";
 }
 
 function formatBoardDate(value: Date, timeZone: string) {

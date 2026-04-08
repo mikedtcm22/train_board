@@ -2,7 +2,7 @@
 
 ## Current Project State
 
-Milestone 1 is complete.
+Milestones 1 and 2 are complete.
 
 Implemented in the current prototype:
 
@@ -14,8 +14,12 @@ Implemented in the current prototype:
 - rotating mock event data
 - ordered forward-only character cycling for changed tiles
 - in-place animation for tone-changing fields such as event name and status
+- live Google Calendar polling through `/api/display`
+- server-side normalization of shared calendar events into board rows
+- real-calendar validation against one shared family calendar
+- configurable app-level time zone support for the displayed times
 
-Milestone 2 should begin from the current prototype rather than reworking the display design. The board layout, row structure, tile sizing, and current animation model should be treated as the baseline unless live data integration exposes a concrete issue.
+Milestone 3 should begin from the current prototype rather than reworking the display design or live data path. The board layout, row structure, tile sizing, current animation model, and Google Calendar integration should now be treated as the baseline unless admin configuration work exposes a concrete issue.
 
 ## 1. Objective
 
@@ -378,6 +382,14 @@ Exit criteria:
 
 - live calendar events show on the board in correct order
 - statuses update correctly over time
+
+Status:
+
+- completed
+- board is connected to a real shared Google Calendar
+- event descriptions now use title only, without appending location
+- app-level time zone formatting is in place for live start/end times
+- live board spacing has been tuned against real household data
 
 ### Milestone 3: Admin Configuration
 
