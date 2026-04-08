@@ -1,3 +1,9 @@
+import {
+  mergeToneMappings,
+  normalizeToneAlias,
+  readStoredStatusSettings,
+  readStoredToneMappings,
+} from "@/lib/admin/admin-settings";
 import { BOARD_ROW_COUNT, type UserTone } from "@/lib/board/board-data";
 
 type GoogleCalendarConfig = {
@@ -58,6 +64,11 @@ export type CalendarIntegrationSummary = {
   }>;
 };
 
+export type CalendarSharedIdentity = {
+  email: string;
+  source: "acl" | "event" | "owner";
+};
+
 export function getCalendarIntegrationSummary(): CalendarIntegrationSummary {
   const config = readGoogleCalendarConfig();
   const missing = [];
@@ -89,7 +100,7 @@ export function getCalendarIntegrationSummary(): CalendarIntegrationSummary {
     timeZone: config.timeZone,
     toneMappings: [...config.toneMappings.entries()].map(([identity, tone]) => ({
       identity,
-      tone,
+      tone: normalizeToneAlias(tone),
     })),
   };
 }
@@ -135,17 +146,97 @@ export async function listGoogleCalendarEvents(now = new Date()) {
     items?: GoogleCalendarApiEvent[];
     timeZone?: string;
   };
+  const storedStatusSettings = await readStoredStatusSettings();
+  const storedToneMappings = await readStoredToneMappings();
 
   return {
-    almostOverMinutes: config.almostOverMinutes,
+    almostOverMinutes: storedStatusSettings.almostOverMinutes,
     events: (payload.items ?? [])
       .filter((event) => event.status !== "cancelled")
       .map(parseGoogleCalendarEvent)
       .filter((event): event is GoogleCalendarEventRecord => event !== null),
-    startingSoonMinutes: config.startingSoonMinutes,
+    startingSoonMinutes: storedStatusSettings.startingSoonMinutes,
+    statusSettings: storedStatusSettings,
     timeZone: config.timeZone ?? payload.timeZone ?? "UTC",
-    toneMappings: config.toneMappings,
+    toneMappings: mergeToneMappings(config.toneMappings, storedToneMappings),
   };
+}
+
+export async function listCalendarSharedIdentities() {
+  const config = readGoogleCalendarConfig();
+  const summary = getCalendarIntegrationSummary();
+
+  if (!summary.configured) {
+    throw new Error(
+      `Google Calendar is not configured. Missing: ${summary.missing.join(", ")}`,
+    );
+  }
+
+  const accessToken = await getAccessToken(config);
+  const calendarMetadata = await fetchCalendarMetadata(config.calendarId, accessToken);
+  const ownerIdentity = calendarMetadata.dataOwner
+    ? [
+        {
+          email: calendarMetadata.dataOwner.trim().toLowerCase(),
+          source: "owner" as const,
+        },
+      ]
+    : [];
+
+  try {
+    const aclUrl = new URL(
+      `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(config.calendarId)}/acl`,
+    );
+    aclUrl.searchParams.set("maxResults", "250");
+    aclUrl.searchParams.set("showDeleted", "false");
+
+    const response = await fetch(aclUrl, {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Google Calendar ACL fetch failed (${response.status}): ${await response.text()}`,
+      );
+    }
+
+    const payload = (await response.json()) as {
+      items?: Array<{
+        role?: string;
+        scope?: {
+          type?: string;
+          value?: string;
+        };
+      }>;
+    };
+
+    const aclIdentities = (payload.items ?? [])
+      .filter((entry) => entry.role !== "none")
+      .map((entry) => entry.scope)
+      .filter((scope) => scope?.type === "user" && Boolean(scope.value))
+      .map((scope) => ({
+        email: scope?.value?.trim().toLowerCase() ?? "",
+        source: "acl" as const,
+      }))
+      .filter((identity) => Boolean(identity.email));
+
+    return {
+      identities: uniqueCalendarIdentities([...ownerIdentity, ...aclIdentities]),
+      sourceLabel: "Shared calendar ACL",
+    };
+  } catch {
+    const fallbackCreators = await listRecentCalendarCreatorIdentities();
+
+    return {
+      identities: uniqueCalendarIdentities([...ownerIdentity, ...fallbackCreators]),
+      issue:
+        "Full shared-account discovery needs a refresh token with calendar.acls.readonly or calendar scope. Showing recent event creators instead.",
+      sourceLabel: "Recent event creators",
+    };
+  }
 }
 
 function getAccessToken(config: GoogleCalendarConfig) {
@@ -222,6 +313,54 @@ function parseIntegerEnv(value: string | undefined, fallback: number) {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
 
+async function listRecentCalendarCreatorIdentities() {
+  const eventPayload = await listGoogleCalendarEvents(new Date());
+
+  return uniqueCalendarIdentities(
+    eventPayload.events
+      .map((event) => event.creatorEmail.trim().toLowerCase())
+      .filter(Boolean)
+      .map((email) => ({
+        email,
+        source: "event" as const,
+      })),
+  );
+}
+
+async function fetchCalendarMetadata(calendarId: string, accessToken: string) {
+  const response = await fetch(
+    `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}`,
+    {
+      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `Google Calendar metadata fetch failed (${response.status}): ${await response.text()}`,
+    );
+  }
+
+  return (await response.json()) as {
+    dataOwner?: string;
+  };
+}
+
+function uniqueCalendarIdentities(identities: CalendarSharedIdentity[]) {
+  const seen = new Map<string, CalendarSharedIdentity>();
+
+  for (const identity of identities) {
+    if (!seen.has(identity.email)) {
+      seen.set(identity.email, identity);
+    }
+  }
+
+  return [...seen.values()].sort((left, right) => left.email.localeCompare(right.email));
+}
+
 function parseToneMappings(value: string | undefined) {
   const toneMappings = new Map<string, UserTone>();
 
@@ -232,7 +371,7 @@ function parseToneMappings(value: string | undefined) {
       continue;
     }
 
-    toneMappings.set(identity, tone);
+    toneMappings.set(identity, normalizeToneAlias(tone));
   }
 
   return toneMappings;
@@ -253,5 +392,7 @@ function readGoogleCalendarConfig(): GoogleCalendarConfig {
 }
 
 function isUserTone(value: string): value is UserTone {
-  return value === "default" || value === "amber" || value === "sky" || value === "mint" || value === "coral";
+  return USER_TONE_ALIASES.has(value) || normalizeToneAlias(value) === value;
 }
+
+const USER_TONE_ALIASES = new Set(["default", "amber", "sky", "mint", "coral"]);

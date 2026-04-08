@@ -290,34 +290,59 @@
   top: -100%;
 }
 
-.toneDefault {
-  --cell-color: #edf0eb;
-  --marker-color: rgba(237, 240, 235, 0.48);
-}
-
 .toneHeader {
   --cell-color: #f4f6f2;
   --marker-color: rgba(244, 246, 242, 0.5);
 }
 
-.toneAmber {
-  --cell-color: #d9ca73;
-  --marker-color: rgba(217, 202, 115, 0.5);
+.toneYellow {
+  --cell-color: #f4c542;
+  --marker-color: rgba(244, 197, 66, 0.5);
 }
 
-.toneSky {
-  --cell-color: #d8e0e7;
-  --marker-color: rgba(216, 224, 231, 0.5);
+.toneBlue {
+  --cell-color: #4b7cff;
+  --marker-color: rgba(75, 124, 255, 0.5);
 }
 
-.toneMint {
-  --cell-color: #d8e0d8;
-  --marker-color: rgba(216, 224, 216, 0.5);
+.tonePink {
+  --cell-color: #ff5fa2;
+  --marker-color: rgba(255, 95, 162, 0.5);
 }
 
-.toneCoral {
-  --cell-color: #e3d1c1;
-  --marker-color: rgba(227, 209, 193, 0.5);
+.tonePurple {
+  --cell-color: #9b5cff;
+  --marker-color: rgba(155, 92, 255, 0.5);
+}
+
+.toneGreen {
+  --cell-color: #33d17a;
+  --marker-color: rgba(51, 209, 122, 0.5);
+}
+
+.toneRed {
+  --cell-color: #ff5c5c;
+  --marker-color: rgba(255, 92, 92, 0.5);
+}
+
+.toneOrange {
+  --cell-color: #ff9f43;
+  --marker-color: rgba(255, 159, 67, 0.5);
+}
+
+.toneCyan {
+  --cell-color: #33d1ff;
+  --marker-color: rgba(51, 209, 255, 0.5);
+}
+
+.toneLime {
+  --cell-color: #b8e94e;
+  --marker-color: rgba(184, 233, 78, 0.5);
+}
+
+.toneWhite {
+  --cell-color: #edf0eb;
+  --marker-color: rgba(237, 240, 235, 0.48);
 }
 
 @keyframes flapTop {

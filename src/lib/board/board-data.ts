@@ -9,7 +9,37 @@ export const BOARD_FIELD_WIDTHS = {
 export const BOARD_ROW_COUNT = 7;
 export const DEMO_ROW_COUNT = BOARD_ROW_COUNT;
 
-export type UserTone = "default" | "amber" | "sky" | "mint" | "coral";
+export const USER_TONE_OPTIONS = [
+  "yellow",
+  "blue",
+  "pink",
+  "purple",
+  "green",
+  "red",
+  "orange",
+  "cyan",
+  "lime",
+  "white",
+] as const;
+
+export type UserTone = (typeof USER_TONE_OPTIONS)[number];
+
+export const DEFAULT_USER_TONE: UserTone = "yellow";
+
+export const USER_TONE_LABELS: Record<UserTone, string> = {
+  blue: "Blue",
+  cyan: "Cyan",
+  green: "Green",
+  lime: "Lime",
+  orange: "Orange",
+  pink: "Pink",
+  purple: "Purple",
+  red: "Red",
+  white: "White",
+  yellow: "Yellow",
+};
+
+export type StatusTone = UserTone;
 
 export type BoardRowData = {
   id: string;
@@ -18,6 +48,7 @@ export type BoardRowData = {
   start: string;
   end: string;
   status: string;
+  statusTone?: StatusTone;
   tone: UserTone;
 };
 
@@ -45,7 +76,7 @@ export function createEmptyRow(slot: number): BoardRowData {
     start: "",
     end: "",
     status: "",
-    tone: "default",
+    tone: "white",
   };
 }
 

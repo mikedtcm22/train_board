@@ -13,7 +13,7 @@ export async function getBoardDisplayPayload(now = new Date()) {
       almostOverMinutes: liveCalendar.almostOverMinutes,
       events: liveCalendar.events,
       now,
-      startingSoonMinutes: liveCalendar.startingSoonMinutes,
+      statusSettings: liveCalendar.statusSettings,
       timeZone: liveCalendar.timeZone,
       toneMappings: liveCalendar.toneMappings,
     });

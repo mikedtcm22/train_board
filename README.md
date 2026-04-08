@@ -9,7 +9,7 @@ Digital household calendar display styled like a split-flap train station board.
 
 ## Status
 
-Milestones 1 and 2 are complete.
+Milestones 1, 2, and 3 are complete.
 
 Milestone 1 delivered the board prototype:
 
@@ -33,13 +33,21 @@ Milestone 2 delivered live calendar integration:
 - missing calendar credentials still fall back to demo mode instead of breaking the display
 - `/admin` shows the current integration status and required environment variables
 
+Milestone 3 delivered admin configuration:
+
+- `/admin` is now a real settings page rather than a setup placeholder
+- account email addresses can be mapped to description text colors without editing code
+- the palette now offers 10 stronger color choices for names and statuses
+- status timing, visible status text, and status text colors are persisted from the admin page
+- admin settings are stored locally and immediately drive the live display board
+
 ## Next Milestone
 
-Milestone 3 is admin configuration:
+Milestone 4 is device tuning:
 
-- build a real settings UI instead of a setup/status placeholder
-- persist theme selection, user color mappings, and board thresholds
-- add an admin preview workflow so display changes can be reviewed before saving
+- validate the display on the target Fire Stick/browser setup
+- tune animation cadence, font sizing, and long-running stability
+- tighten kiosk behavior for always-on monitor use
 
 ## Environment Setup
 
@@ -51,7 +59,7 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 GOOGLE_REFRESH_TOKEN=
 GOOGLE_CALENDAR_TIME_ZONE=America/Chicago
-BOARD_USER_TONES=parent1@example.com=sky,parent2@example.com=amber
+BOARD_USER_TONES=parent1@example.com=blue,parent2@example.com=yellow
 ```
 
 Optional knobs:

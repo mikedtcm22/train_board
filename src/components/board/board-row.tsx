@@ -10,18 +10,18 @@ type BoardRowProps = {
 
 function getStatusTone(status: string) {
   if (status === "ALMOST OVER") {
-    return "coral";
+    return "red";
   }
 
   if (status === "IN PROGRESS") {
-    return "mint";
+    return "green";
   }
 
   if (status === "STARTING SOON") {
-    return "amber";
+    return "yellow";
   }
 
-  return "default";
+  return "white";
 }
 
 export function BoardRow({ row, rowIndex }: BoardRowProps) {
@@ -35,7 +35,7 @@ export function BoardRow({ row, rowIndex }: BoardRowProps) {
         <div className={styles.field}>
           <FlapText
             delayOffset={rowIndex * 34}
-            tone="default"
+            tone="white"
             value={row.date}
             width={BOARD_FIELD_WIDTHS.date}
           />
@@ -51,7 +51,7 @@ export function BoardRow({ row, rowIndex }: BoardRowProps) {
         <div className={styles.field}>
           <FlapText
             delayOffset={rowIndex * 34}
-            tone="default"
+            tone="white"
             value={row.start}
             width={BOARD_FIELD_WIDTHS.start}
           />
@@ -59,7 +59,7 @@ export function BoardRow({ row, rowIndex }: BoardRowProps) {
         <div className={styles.field}>
           <FlapText
             delayOffset={rowIndex * 34}
-            tone="default"
+            tone="white"
             value={row.end}
             width={BOARD_FIELD_WIDTHS.end}
           />
@@ -67,7 +67,7 @@ export function BoardRow({ row, rowIndex }: BoardRowProps) {
         <div className={styles.field}>
           <FlapText
             delayOffset={rowIndex * 34}
-            tone={getStatusTone(row.status)}
+            tone={row.statusTone ?? getStatusTone(row.status)}
             value={row.status}
             width={BOARD_FIELD_WIDTHS.status}
           />

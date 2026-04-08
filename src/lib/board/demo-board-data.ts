@@ -10,7 +10,8 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "09:30",
         end: "11:00",
         status: "STARTING SOON",
-        tone: "sky",
+        statusTone: "yellow",
+        tone: "blue",
       },
       {
         id: "market",
@@ -19,7 +20,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "11:30",
         end: "12:15",
         status: "",
-        tone: "amber",
+        tone: "yellow",
       },
       {
         id: "brunch",
@@ -28,7 +29,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "12:30",
         end: "02:00",
         status: "",
-        tone: "coral",
+        tone: "pink",
       },
       {
         id: "library",
@@ -37,7 +38,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "02:30",
         end: "03:15",
         status: "",
-        tone: "mint",
+        tone: "green",
       },
       {
         id: "dinner",
@@ -46,7 +47,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "05:30",
         end: "06:20",
         status: "",
-        tone: "amber",
+        tone: "yellow",
       },
       {
         id: "movie",
@@ -55,7 +56,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "07:30",
         end: "09:00",
         status: "",
-        tone: "coral",
+        tone: "pink",
       },
       {
         id: "airport",
@@ -64,7 +65,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "08:00",
         end: "09:10",
         status: "",
-        tone: "sky",
+        tone: "blue",
       },
     ],
   },
@@ -77,7 +78,8 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "09:30",
         end: "11:00",
         status: "IN PROGRESS",
-        tone: "sky",
+        statusTone: "green",
+        tone: "blue",
       },
       {
         id: "market",
@@ -86,7 +88,8 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "11:30",
         end: "12:15",
         status: "STARTING SOON",
-        tone: "amber",
+        statusTone: "yellow",
+        tone: "yellow",
       },
       {
         id: "brunch",
@@ -95,7 +98,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "12:30",
         end: "02:00",
         status: "",
-        tone: "coral",
+        tone: "pink",
       },
       {
         id: "library",
@@ -104,7 +107,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "02:30",
         end: "03:15",
         status: "",
-        tone: "mint",
+        tone: "green",
       },
       {
         id: "dinner",
@@ -113,7 +116,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "05:30",
         end: "06:20",
         status: "",
-        tone: "amber",
+        tone: "yellow",
       },
       {
         id: "movie",
@@ -122,7 +125,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "07:30",
         end: "09:00",
         status: "",
-        tone: "coral",
+        tone: "pink",
       },
       {
         id: "airport",
@@ -131,7 +134,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "08:00",
         end: "09:10",
         status: "",
-        tone: "sky",
+        tone: "blue",
       },
     ],
   },
@@ -144,7 +147,8 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "11:30",
         end: "12:15",
         status: "IN PROGRESS",
-        tone: "amber",
+        statusTone: "green",
+        tone: "yellow",
       },
       {
         id: "brunch",
@@ -153,7 +157,8 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "12:30",
         end: "02:00",
         status: "STARTING SOON",
-        tone: "coral",
+        statusTone: "yellow",
+        tone: "pink",
       },
       {
         id: "library",
@@ -162,7 +167,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "02:30",
         end: "03:15",
         status: "",
-        tone: "mint",
+        tone: "green",
       },
       {
         id: "dinner",
@@ -171,7 +176,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "05:30",
         end: "06:20",
         status: "",
-        tone: "amber",
+        tone: "yellow",
       },
       {
         id: "movie",
@@ -180,7 +185,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "07:30",
         end: "09:00",
         status: "",
-        tone: "coral",
+        tone: "pink",
       },
       {
         id: "airport",
@@ -189,7 +194,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "08:00",
         end: "09:10",
         status: "",
-        tone: "sky",
+        tone: "blue",
       },
       {
         id: "museum",
@@ -198,7 +203,7 @@ export const demoSnapshots: BoardSnapshot[] = [
         start: "10:30",
         end: "12:00",
         status: "",
-        tone: "amber",
+        tone: "yellow",
       },
     ],
   },

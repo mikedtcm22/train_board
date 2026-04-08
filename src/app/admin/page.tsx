@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { AdminColorMappings } from "./admin-color-mappings";
+import { AdminStatusSettings } from "./admin-status-settings";
 import { getCalendarIntegrationSummary } from "@/lib/calendar/google-calendar";
 import styles from "./page.module.css";
 
@@ -8,13 +10,12 @@ export default function AdminPage() {
   return (
     <main className={styles.page}>
       <section className={styles.panel}>
-        <p className={styles.eyebrow}>Milestone 2 Setup</p>
-        <h1 className={styles.title}>Google Calendar Wiring Is In Place</h1>
+        <p className={styles.eyebrow}>Milestone 3 Admin</p>
+        <h1 className={styles.title}>Account Color Mapping</h1>
         <p className={styles.copy}>
-          The display route now supports live Google Calendar polling through
-          server-side credentials. Until the required environment variables are
-          present, the board stays in demo mode so the split-flap display
-          remains usable during setup.
+          The display remains read-only. Manage shared-calendar account colors here
+          from a separate admin page, then let the monitor continue running only the
+          full-screen board.
         </p>
         <div className={styles.grid}>
           <section className={styles.subpanel}>
@@ -48,15 +49,12 @@ export default function AdminPage() {
           </section>
 
           <section className={styles.subpanel}>
-            <h2 className={styles.sectionTitle}>Environment Setup</h2>
-            <ul className={styles.list}>
-              <li>`GOOGLE_CALENDAR_ID`</li>
-              <li>`GOOGLE_CLIENT_ID`</li>
-              <li>`GOOGLE_CLIENT_SECRET`</li>
-              <li>`GOOGLE_REFRESH_TOKEN`</li>
-              <li>`GOOGLE_CALENDAR_TIME_ZONE` (optional)</li>
-              <li>`BOARD_USER_TONES` (optional)</li>
-            </ul>
+            <h2 className={styles.sectionTitle}>Admin Scope</h2>
+            <p className={styles.copySmall}>
+              This admin route is intentionally separate from the display route. The
+              only live configuration here is which color each shared Google account
+              uses for description text on the board.
+            </p>
             {integration.missing.length > 0 ? (
               <p className={styles.warning}>
                 Missing now: {integration.missing.join(", ")}
@@ -69,21 +67,8 @@ export default function AdminPage() {
           </section>
         </div>
 
-        <section className={styles.subpanel}>
-          <h2 className={styles.sectionTitle}>Color Mapping Format</h2>
-          <p className={styles.copySmall}>
-            Use `BOARD_USER_TONES` to pin specific Google identities to board
-            colors. Format example:
-          </p>
-          <code className={styles.codeSample}>
-            parent1@example.com=sky,parent2@example.com=amber,parent3@example.com=coral
-          </code>
-          <p className={styles.copySmall}>
-            When no explicit mapping exists, the board assigns a stable fallback
-            color from the creator email so repeat events stay visually
-            consistent.
-          </p>
-        </section>
+        <AdminColorMappings />
+        <AdminStatusSettings />
 
         <div className={styles.actions}>
           <Link className={styles.link} href="/display">

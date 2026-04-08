@@ -1,8 +1,9 @@
+import type { UserTone } from "@/lib/board/board-data";
 import { formatBoardText } from "@/lib/board/format-board";
 import { FlapCell } from "./flap-cell";
 import styles from "./board.module.css";
 
-export type BoardTone = "default" | "header" | "amber" | "sky" | "mint" | "coral";
+export type BoardTone = "header" | UserTone;
 
 type FlapTextProps = {
   animated?: boolean;

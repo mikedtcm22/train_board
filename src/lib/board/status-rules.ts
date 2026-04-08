@@ -1,4 +1,25 @@
-export type BoardStatusLabel = "" | "STARTING SOON" | "IN PROGRESS" | "ALMOST OVER";
+import {
+  BOARD_FIELD_WIDTHS,
+  DEFAULT_USER_TONE,
+  type StatusTone,
+} from "./board-data";
+
+export type BoardStatusKey = "" | "startingSoon" | "inProgress" | "almostOver";
+
+export type BoardStatusSettings = {
+  almostOverMinutes: number;
+  labels: {
+    almostOver: string;
+    inProgress: string;
+    startingSoon: string;
+  };
+  tones: {
+    almostOver: StatusTone;
+    inProgress: StatusTone;
+    startingSoon: StatusTone;
+  };
+  startingSoonMinutes: number;
+};
 
 type ComputeBoardStatusArgs = {
   almostOverMinutes: number;
@@ -8,13 +29,30 @@ type ComputeBoardStatusArgs = {
   startingSoonMinutes: number;
 };
 
+export const DEFAULT_STATUS_SETTINGS: BoardStatusSettings = {
+  almostOverMinutes: 15,
+  labels: {
+    almostOver: "ALMOST OVER",
+    inProgress: "IN PROGRESS",
+    startingSoon: "STARTING SOON",
+  },
+  tones: {
+    almostOver: "red",
+    inProgress: "green",
+    startingSoon: DEFAULT_USER_TONE,
+  },
+  startingSoonMinutes: 30,
+};
+
+export const STATUS_TEXT_MAX_LENGTH = BOARD_FIELD_WIDTHS.status;
+
 export function computeBoardStatus({
   almostOverMinutes,
   end,
   now,
   start,
   startingSoonMinutes,
-}: ComputeBoardStatusArgs): BoardStatusLabel {
+}: ComputeBoardStatusArgs): BoardStatusKey {
   const nowMs = now.getTime();
   const startMs = start.getTime();
   const endMs = end.getTime();
@@ -25,14 +63,14 @@ export function computeBoardStatus({
 
   if (nowMs >= startMs) {
     if (almostOverMinutes > 0 && endMs - nowMs <= almostOverMinutes * 60_000) {
-      return "ALMOST OVER";
+      return "almostOver";
     }
 
-    return "IN PROGRESS";
+    return "inProgress";
   }
 
   if (startingSoonMinutes > 0 && startMs - nowMs <= startingSoonMinutes * 60_000) {
-    return "STARTING SOON";
+    return "startingSoon";
   }
 
   return "";

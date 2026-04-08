@@ -1,9 +1,13 @@
 import {
   BOARD_ROW_COUNT,
+  DEFAULT_USER_TONE,
   type BoardRowData,
   type UserTone,
 } from "./board-data";
-import { computeBoardStatus } from "./status-rules";
+import {
+  computeBoardStatus,
+  type BoardStatusSettings,
+} from "./status-rules";
 
 type CalendarToneMappings = Map<string, UserTone>;
 
@@ -22,19 +26,17 @@ type BuildBoardRowsArgs = {
   events: CalendarEventRecord[];
   now: Date;
   rowCount?: number;
-  startingSoonMinutes: number;
+  statusSettings: BoardStatusSettings;
   timeZone: string;
   toneMappings: CalendarToneMappings;
 };
-
-const FALLBACK_TONE_SEQUENCE: UserTone[] = ["sky", "amber", "coral", "mint"];
 
 export function buildBoardRowsFromCalendarEvents({
   almostOverMinutes,
   events,
   now,
   rowCount = BOARD_ROW_COUNT,
-  startingSoonMinutes,
+  statusSettings,
   timeZone,
   toneMappings,
 }: BuildBoardRowsArgs): BoardRowData[] {
@@ -48,7 +50,7 @@ export function buildBoardRowsFromCalendarEvents({
         end: event.end,
         now,
         start: event.start,
-        startingSoonMinutes,
+        startingSoonMinutes: statusSettings.startingSoonMinutes,
       });
 
       return {
@@ -57,7 +59,8 @@ export function buildBoardRowsFromCalendarEvents({
         id: event.id,
         name: buildDescription(event.summary),
         start: event.isAllDay ? "ALLDY" : formatBoardTime(event.start, timeZone),
-        status,
+        status: status ? statusSettings.labels[status] : "",
+        statusTone: status ? statusSettings.tones[status] : undefined,
         tone: resolveUserTone(event.creatorEmail, toneMappings),
       };
     });
@@ -91,15 +94,11 @@ function formatBoardTime(value: Date, timeZone: string) {
   return `${hour}:${minute}`;
 }
 
-function hashIdentity(identity: string) {
-  return [...identity].reduce((total, char) => total + char.charCodeAt(0), 0);
-}
-
 function resolveUserTone(identity: string, toneMappings: CalendarToneMappings): UserTone {
   const normalizedIdentity = identity.trim().toLowerCase();
 
   if (!normalizedIdentity) {
-    return "default";
+    return DEFAULT_USER_TONE;
   }
 
   const mappedTone = toneMappings.get(normalizedIdentity);
@@ -108,6 +107,5 @@ function resolveUserTone(identity: string, toneMappings: CalendarToneMappings): 
     return mappedTone;
   }
 
-  const index = hashIdentity(normalizedIdentity) % FALLBACK_TONE_SEQUENCE.length;
-  return FALLBACK_TONE_SEQUENCE[index];
+  return DEFAULT_USER_TONE;
 }

@@ -2,7 +2,7 @@
 
 ## Current Project State
 
-Milestones 1 and 2 are complete.
+Milestones 1, 2, and 3 are complete.
 
 Implemented in the current prototype:
 
@@ -18,8 +18,12 @@ Implemented in the current prototype:
 - server-side normalization of shared calendar events into board rows
 - real-calendar validation against one shared family calendar
 - configurable app-level time zone support for the displayed times
+- separate admin settings UI for account color mapping
+- persisted status settings for timing, labels, and colors
+- expanded 10-color palette for description and status text
+- local persisted admin settings store feeding the live board
 
-Milestone 3 should begin from the current prototype rather than reworking the display design or live data path. The board layout, row structure, tile sizing, current animation model, and Google Calendar integration should now be treated as the baseline unless admin configuration work exposes a concrete issue.
+Milestone 4 should begin from the current prototype rather than reworking the display design, live data path, or admin feature set. The board layout, animation model, Google Calendar integration, and separate admin route should now be treated as the baseline unless device validation exposes a concrete issue.
 
 ## 1. Objective
 
@@ -400,6 +404,15 @@ Status:
 Exit criteria:
 
 - household config can be changed without touching code
+
+Status:
+
+- completed
+- `/admin` is now a separate settings surface rather than a placeholder
+- shared calendar accounts can be assigned text colors from the admin page
+- status timing, status labels, and status colors are configurable from the admin page
+- admin settings persist locally and immediately feed the live display
+- palette expanded from muted prototype colors to a 10-color selectable set
 
 ### Milestone 4: Device Tuning
 
