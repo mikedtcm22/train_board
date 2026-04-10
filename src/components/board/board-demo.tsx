@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   DEFAULT_BOARD_HEADER_MESSAGE,
+  DEFAULT_BOARD_HEADER_TONE,
   DEMO_ROW_COUNT,
   padBoardRows,
 } from "@/lib/board/board-data";
@@ -105,6 +106,7 @@ export function BoardDemo() {
     <BoardShell
       currentDateLabel={currentDateLabel}
       headerMessage={DEFAULT_BOARD_HEADER_MESSAGE}
+      headerTone={DEFAULT_BOARD_HEADER_TONE}
       currentTimeLabel={currentTimeLabel}
       isFullscreen={isFullscreen}
       onFullscreenToggle={toggleFullscreen}

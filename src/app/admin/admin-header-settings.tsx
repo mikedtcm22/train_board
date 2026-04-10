@@ -4,16 +4,22 @@ import { startTransition, useEffect, useState } from "react";
 import {
   BOARD_HEADER_TEXT_MAX_LENGTH,
   DEFAULT_BOARD_HEADER_MESSAGE,
+  DEFAULT_BOARD_HEADER_TONE,
+  USER_TONE_LABELS,
+  USER_TONE_OPTIONS,
+  type UserTone,
 } from "@/lib/board/board-data";
 import styles from "./page.module.css";
 
 type HeaderMessagePayload = {
   headerMessage: string;
+  headerTone: UserTone;
 };
 
 export function AdminHeaderSettings() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [headerMessage, setHeaderMessage] = useState(DEFAULT_BOARD_HEADER_MESSAGE);
+  const [headerTone, setHeaderTone] = useState<UserTone>(DEFAULT_BOARD_HEADER_TONE);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
@@ -36,6 +42,7 @@ export function AdminHeaderSettings() {
         }
 
         setHeaderMessage(payload.headerMessage);
+        setHeaderTone(payload.headerTone);
       } catch (error) {
         setErrorMessage(
           error instanceof Error ? error.message : "Unable to load header message.",
@@ -56,7 +63,7 @@ export function AdminHeaderSettings() {
           setErrorMessage(null);
 
           const response = await fetch("/api/admin/header-message", {
-            body: JSON.stringify({ headerMessage }),
+            body: JSON.stringify({ headerMessage, headerTone }),
             headers: {
               "Content-Type": "application/json",
             },
@@ -71,6 +78,7 @@ export function AdminHeaderSettings() {
           }
 
           setHeaderMessage(payload.headerMessage);
+          setHeaderTone(payload.headerTone);
           setNotice("Header message saved.");
         } catch (error) {
           setErrorMessage(
@@ -132,6 +140,21 @@ export function AdminHeaderSettings() {
           <span className={styles.inputHint}>
             {headerMessage.trim().length || 0} / {BOARD_HEADER_TEXT_MAX_LENGTH} characters
           </span>
+        </label>
+
+        <label className={styles.inputGroup}>
+          <span className={styles.inputLabel}>Header Text Color</span>
+          <select
+            className={styles.select}
+            onChange={(event) => setHeaderTone(event.target.value as UserTone)}
+            value={headerTone}
+          >
+            {USER_TONE_OPTIONS.map((tone) => (
+              <option key={tone} value={tone}>
+                {USER_TONE_LABELS[tone]}
+              </option>
+            ))}
+          </select>
         </label>
       </div>
 

@@ -65,6 +65,9 @@
   min-width: 0;
   overflow: hidden;
   padding-top: clamp(0.06rem, 0.12vw, 0.12rem);
+  padding-left: calc(
+    0.32rem + clamp(0.34rem, 0.72vw, 0.58rem) + var(--board-cell-width) + var(--board-cell-gap)
+  );
 }
 
 .nowPanel {
@@ -325,7 +328,7 @@
 }
 
 .halfGlyphBanner {
-  font-size: clamp(2.9rem, 4.38vw, 5.05rem);
+  font-size: clamp(2.32rem, 3.5vw, 4.04rem);
   letter-spacing: 0.015em;
 }
 

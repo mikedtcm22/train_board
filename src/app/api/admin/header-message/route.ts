@@ -1,18 +1,26 @@
 import { NextResponse } from "next/server";
 import {
   readStoredHeaderMessage,
-  writeStoredHeaderMessage,
+  readStoredHeaderTone,
+  writeStoredHeaderSettings,
 } from "@/lib/admin/admin-settings";
-import { DEFAULT_BOARD_HEADER_MESSAGE } from "@/lib/board/board-data";
+import {
+  DEFAULT_BOARD_HEADER_MESSAGE,
+  DEFAULT_BOARD_HEADER_TONE,
+} from "@/lib/board/board-data";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const headerMessage = await readStoredHeaderMessage();
+    const [headerMessage, headerTone] = await Promise.all([
+      readStoredHeaderMessage(),
+      readStoredHeaderTone(),
+    ]);
 
     return NextResponse.json({
       headerMessage,
+      headerTone,
     });
   } catch (error) {
     return NextResponse.json(
@@ -28,14 +36,22 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as {
       headerMessage?: string;
+      headerTone?: typeof DEFAULT_BOARD_HEADER_TONE;
     };
 
-    await writeStoredHeaderMessage(body.headerMessage ?? DEFAULT_BOARD_HEADER_MESSAGE);
+    await writeStoredHeaderSettings(
+      body.headerMessage ?? DEFAULT_BOARD_HEADER_MESSAGE,
+      body.headerTone ?? DEFAULT_BOARD_HEADER_TONE,
+    );
 
-    const headerMessage = await readStoredHeaderMessage();
+    const [headerMessage, headerTone] = await Promise.all([
+      readStoredHeaderMessage(),
+      readStoredHeaderTone(),
+    ]);
 
     return NextResponse.json({
       headerMessage,
+      headerTone,
     });
   } catch (error) {
     return NextResponse.json(

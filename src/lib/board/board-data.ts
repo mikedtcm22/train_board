@@ -28,6 +28,7 @@ export const USER_TONE_OPTIONS = [
 export type UserTone = (typeof USER_TONE_OPTIONS)[number];
 
 export const DEFAULT_USER_TONE: UserTone = "yellow";
+export const DEFAULT_BOARD_HEADER_TONE: UserTone = "white";
 
 export const USER_TONE_LABELS: Record<UserTone, string> = {
   blue: "Blue",
@@ -64,6 +65,7 @@ export type BoardDisplayMode = "demo" | "live";
 export type BoardDisplayPayload = {
   generatedAt: string;
   headerMessage: string;
+  headerTone: UserTone;
   issue?: string;
   mode: BoardDisplayMode;
   pollIntervalMs: number;

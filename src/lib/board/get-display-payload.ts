@@ -1,5 +1,11 @@
-import { readStoredHeaderMessage } from "@/lib/admin/admin-settings";
-import { DEFAULT_BOARD_HEADER_MESSAGE } from "./board-data";
+import {
+  readStoredHeaderMessage,
+  readStoredHeaderTone,
+} from "@/lib/admin/admin-settings";
+import {
+  DEFAULT_BOARD_HEADER_MESSAGE,
+  DEFAULT_BOARD_HEADER_TONE,
+} from "./board-data";
 import { listGoogleCalendarEvents } from "@/lib/calendar/google-calendar";
 import { buildBoardRowsFromCalendarEvents } from "./live-board-data";
 import { createBoardDisplayPayload } from "./display-payload";
@@ -10,6 +16,7 @@ const LIVE_POLL_INTERVAL_MS = 30_000;
 
 export async function getBoardDisplayPayload(now = new Date()) {
   const headerMessage = await getHeaderMessage();
+  const headerTone = await getHeaderTone();
 
   try {
     const liveCalendar = await listGoogleCalendarEvents(now);
@@ -24,6 +31,7 @@ export async function getBoardDisplayPayload(now = new Date()) {
 
     return createBoardDisplayPayload({
       headerMessage,
+      headerTone,
       mode: "live",
       now,
       pollIntervalMs: LIVE_POLL_INTERVAL_MS,
@@ -33,6 +41,7 @@ export async function getBoardDisplayPayload(now = new Date()) {
   } catch (error) {
     return createBoardDisplayPayload({
       headerMessage,
+      headerTone,
       issue: formatIssue(error),
       mode: "demo",
       now,
@@ -61,5 +70,13 @@ async function getHeaderMessage() {
     return await readStoredHeaderMessage();
   } catch {
     return DEFAULT_BOARD_HEADER_MESSAGE;
+  }
+}
+
+async function getHeaderTone() {
+  try {
+    return await readStoredHeaderTone();
+  } catch {
+    return DEFAULT_BOARD_HEADER_TONE;
   }
 }

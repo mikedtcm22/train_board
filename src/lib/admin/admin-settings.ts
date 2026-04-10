@@ -4,6 +4,7 @@ import { get, put } from "@vercel/blob";
 import {
   BOARD_HEADER_TEXT_MAX_LENGTH,
   DEFAULT_BOARD_HEADER_MESSAGE,
+  DEFAULT_BOARD_HEADER_TONE,
   DEFAULT_USER_TONE,
   USER_TONE_OPTIONS,
   type UserTone,
@@ -17,6 +18,7 @@ import {
 
 type AdminSettingsFile = {
   headerMessage?: string;
+  headerTone?: UserTone;
   statusSettings?: {
     almostOverMinutes?: number;
     labels?: Partial<BoardStatusSettings["labels"]>;
@@ -41,6 +43,7 @@ export async function readAdminSettings() {
 
     return {
       headerMessage: normalizeHeaderMessage(parsed.headerMessage),
+      headerTone: normalizeHeaderTone(parsed.headerTone),
       statusSettings: normalizeStatusSettings(parsed.statusSettings),
       toneMappings: normalizeToneMappings(parsed.toneMappings ?? {}),
     };
@@ -48,6 +51,7 @@ export async function readAdminSettings() {
     if (isMissingFileError(error)) {
       return {
         headerMessage: DEFAULT_BOARD_HEADER_MESSAGE,
+        headerTone: DEFAULT_BOARD_HEADER_TONE,
         statusSettings: DEFAULT_STATUS_SETTINGS,
         toneMappings: new Map<string, UserTone>(),
       };
@@ -67,6 +71,11 @@ export async function readStoredHeaderMessage() {
   return settings.headerMessage;
 }
 
+export async function readStoredHeaderTone() {
+  const settings = await readAdminSettings();
+  return settings.headerTone;
+}
+
 export async function readStoredStatusSettings() {
   const settings = await readAdminSettings();
   return settings.statusSettings;
@@ -82,6 +91,7 @@ export async function writeStoredToneMappings(
 
   const nextSettings = {
     headerMessage: currentSettings.headerMessage,
+    headerTone: currentSettings.headerTone,
     statusSettings: currentSettings.statusSettings,
     toneMappings: Object.fromEntries(normalizedMappings),
   };
@@ -104,6 +114,7 @@ export async function writeStoredStatusSettings(statusSettings: BoardStatusSetti
 
   const nextSettings = {
     headerMessage: currentSettings.headerMessage,
+    headerTone: currentSettings.headerTone,
     statusSettings: normalizeStatusSettings(statusSettings),
     toneMappings: Object.fromEntries(currentSettings.toneMappings),
   };
@@ -121,11 +132,15 @@ export async function writeStoredStatusSettings(statusSettings: BoardStatusSetti
   );
 }
 
-export async function writeStoredHeaderMessage(headerMessage: string) {
+export async function writeStoredHeaderSettings(
+  headerMessage: string,
+  headerTone: UserTone,
+) {
   const currentSettings = await readAdminSettings();
 
   const nextSettings = {
     headerMessage: normalizeHeaderMessage(headerMessage),
+    headerTone: normalizeHeaderTone(headerTone),
     statusSettings: currentSettings.statusSettings,
     toneMappings: Object.fromEntries(currentSettings.toneMappings),
   };
@@ -262,6 +277,10 @@ function normalizeHeaderMessage(value: string | undefined) {
   return normalized || DEFAULT_BOARD_HEADER_MESSAGE;
 }
 
+function normalizeHeaderTone(value: string | undefined) {
+  return normalizeToneAlias(value ?? DEFAULT_BOARD_HEADER_TONE);
+}
+
 function normalizeMinutes(value: number | undefined, fallback: number) {
   if (!Number.isFinite(value)) {
     return fallback;
@@ -283,6 +302,7 @@ async function readBlobBackedSettings() {
   if (!result || result.statusCode !== 200) {
     return {
       headerMessage: DEFAULT_BOARD_HEADER_MESSAGE,
+      headerTone: DEFAULT_BOARD_HEADER_TONE,
       statusSettings: DEFAULT_STATUS_SETTINGS,
       toneMappings: new Map<string, UserTone>(),
     };
@@ -293,6 +313,7 @@ async function readBlobBackedSettings() {
 
   return {
     headerMessage: normalizeHeaderMessage(parsed.headerMessage),
+    headerTone: normalizeHeaderTone(parsed.headerTone),
     statusSettings: normalizeStatusSettings(parsed.statusSettings),
     toneMappings: normalizeToneMappings(parsed.toneMappings ?? {}),
   };

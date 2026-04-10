@@ -1,6 +1,7 @@
 import {
   BOARD_FIELD_WIDTHS,
   BOARD_HEADER_WIDTH,
+  type UserTone,
   type BoardSnapshot,
 } from "@/lib/board/board-data";
 import { BoardRow } from "./board-row";
@@ -10,6 +11,7 @@ import styles from "./board.module.css";
 type BoardShellProps = {
   currentDateLabel: string;
   headerMessage: string;
+  headerTone: UserTone;
   currentTimeLabel: string;
   isFullscreen: boolean;
   onFullscreenToggle: () => void;
@@ -27,6 +29,7 @@ const HEADER_FIELDS = [
 export function BoardShell({
   currentDateLabel,
   headerMessage,
+  headerTone,
   currentTimeLabel,
   isFullscreen,
   onFullscreenToggle,
@@ -42,7 +45,7 @@ export function BoardShell({
           <div className={styles.bannerPanel}>
             <FlapText
               size="banner"
-              tone="header"
+              tone={headerTone}
               value={headerMessage}
               width={BOARD_HEADER_WIDTH}
             />
