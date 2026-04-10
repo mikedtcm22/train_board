@@ -177,8 +177,11 @@
 }
 
 .timeLights {
-  display: inline-grid;
-  gap: 0.16rem;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-self: stretch;
+  padding-block: clamp(0.24rem, 0.4vw, 0.34rem);
 }
 
 .timeLight {

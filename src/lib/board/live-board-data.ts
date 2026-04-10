@@ -82,11 +82,10 @@ function buildEventTimeDisplay(
   const startDayKey = getLocalDateKey(event.start, timeZone);
   const endDisplayDate = getDisplayEndDate(event);
   const endDayKey = getLocalDateKey(endDisplayDate, timeZone);
+  const todayKey = getLocalDateKey(now, timeZone);
   const currentDayKey = getCurrentDisplayDayKey({
-    endDayKey,
-    now,
+    todayKey,
     startDayKey,
-    timeZone,
   });
   const spansMultipleDays = startDayKey !== endDayKey;
 
@@ -108,17 +107,23 @@ function buildEventTimeDisplay(
   return {
     date: formatBoardDate(parseLocalDateKey(currentDayKey, event.start, timeZone), timeZone),
     end:
-      currentDayKey === endDayKey && endTime
+      todayKey === endDayKey && endTime
         ? endTime.label
         : formatCompactBoardDate(endDisplayDate, timeZone),
     endMeridiem:
-      currentDayKey === endDayKey && endTime ? endTime.meridiem : undefined,
+      todayKey === endDayKey && endTime ? endTime.meridiem : undefined,
     start:
-      currentDayKey === startDayKey && startTime
+      todayKey < startDayKey && startTime
+        ? startTime.label
+        : currentDayKey === startDayKey && startTime
         ? startTime.label
         : formatCompactBoardDate(event.start, timeZone),
     startMeridiem:
-      currentDayKey === startDayKey && startTime ? startTime.meridiem : undefined,
+      todayKey < startDayKey && startTime
+        ? startTime.meridiem
+        : currentDayKey === startDayKey && startTime
+        ? startTime.meridiem
+        : undefined,
   };
 }
 
@@ -166,24 +171,14 @@ function formatBoardTime(value: Date, timeZone: string) {
 }
 
 function getCurrentDisplayDayKey({
-  endDayKey,
-  now,
+  todayKey,
   startDayKey,
-  timeZone,
 }: {
-  endDayKey: string;
-  now: Date;
+  todayKey: string;
   startDayKey: string;
-  timeZone: string;
 }) {
-  const todayKey = getLocalDateKey(now, timeZone);
-
   if (todayKey <= startDayKey) {
     return startDayKey;
-  }
-
-  if (todayKey >= endDayKey) {
-    return endDayKey;
   }
 
   return todayKey;
