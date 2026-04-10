@@ -153,7 +153,7 @@ export async function listGoogleCalendarEvents(now = new Date()) {
     almostOverMinutes: storedStatusSettings.almostOverMinutes,
     events: (payload.items ?? [])
       .filter((event) => event.status !== "cancelled")
-      .map(parseGoogleCalendarEvent)
+      .map((event) => parseGoogleCalendarEvent(event, config.timeZone ?? payload.timeZone ?? "UTC"))
       .filter((event): event is GoogleCalendarEventRecord => event !== null),
     startingSoonMinutes: storedStatusSettings.startingSoonMinutes,
     statusSettings: storedStatusSettings,
@@ -271,9 +271,12 @@ function getAccessToken(config: GoogleCalendarConfig) {
     });
 }
 
-function parseGoogleCalendarEvent(event: GoogleCalendarApiEvent): GoogleCalendarEventRecord | null {
-  const start = parseGoogleCalendarDateValue(event.start);
-  const end = parseGoogleCalendarDateValue(event.end);
+function parseGoogleCalendarEvent(
+  event: GoogleCalendarApiEvent,
+  fallbackTimeZone: string,
+): GoogleCalendarEventRecord | null {
+  const start = parseGoogleCalendarDateValue(event.start, fallbackTimeZone);
+  const end = parseGoogleCalendarDateValue(event.end, fallbackTimeZone);
 
   if (!start || !end) {
     return null;
@@ -290,7 +293,10 @@ function parseGoogleCalendarEvent(event: GoogleCalendarApiEvent): GoogleCalendar
   };
 }
 
-function parseGoogleCalendarDateValue(value?: GoogleCalendarDateValue) {
+function parseGoogleCalendarDateValue(
+  value: GoogleCalendarDateValue | undefined,
+  fallbackTimeZone: string,
+) {
   if (!value) {
     return null;
   }
@@ -301,11 +307,49 @@ function parseGoogleCalendarDateValue(value?: GoogleCalendarDateValue) {
   }
 
   if (value.date) {
-    const parsed = new Date(`${value.date}T00:00:00`);
-    return Number.isNaN(parsed.getTime()) ? null : parsed;
+    return parseDateOnlyInTimeZone(value.date, value.timeZone ?? fallbackTimeZone);
   }
 
   return null;
+}
+
+function parseDateOnlyInTimeZone(value: string, timeZone: string) {
+  const [year, month, day] = value.split("-").map((segment) => Number.parseInt(segment, 10));
+
+  if (!year || !month || !day) {
+    return null;
+  }
+
+  let utcDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0));
+
+  for (let index = 0; index < 2; index += 1) {
+    const offsetMs = getTimeZoneOffsetMs(utcDate, timeZone);
+    utcDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0) - offsetMs);
+  }
+
+  return Number.isNaN(utcDate.getTime()) ? null : utcDate;
+}
+
+function getTimeZoneOffsetMs(value: Date, timeZone: string) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    day: "2-digit",
+    hour: "2-digit",
+    hour12: false,
+    minute: "2-digit",
+    month: "2-digit",
+    second: "2-digit",
+    timeZone,
+    year: "numeric",
+  }).formatToParts(value);
+  const year = Number.parseInt(parts.find((part) => part.type === "year")?.value ?? "0", 10);
+  const month = Number.parseInt(parts.find((part) => part.type === "month")?.value ?? "1", 10);
+  const day = Number.parseInt(parts.find((part) => part.type === "day")?.value ?? "1", 10);
+  const hour = Number.parseInt(parts.find((part) => part.type === "hour")?.value ?? "0", 10);
+  const minute = Number.parseInt(parts.find((part) => part.type === "minute")?.value ?? "0", 10);
+  const second = Number.parseInt(parts.find((part) => part.type === "second")?.value ?? "0", 10);
+
+  const asUtc = Date.UTC(year, month - 1, day, hour, minute, second);
+  return asUtc - value.getTime();
 }
 
 function parseIntegerEnv(value: string | undefined, fallback: number) {

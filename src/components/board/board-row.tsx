@@ -49,17 +49,17 @@ export function BoardRow({ row, rowIndex }: BoardRowProps) {
           />
         </div>
         <div className={styles.field}>
-          <FlapText
+          <TimeField
             delayOffset={rowIndex * 34}
-            tone="white"
+            meridiem={row.startMeridiem}
             value={row.start}
             width={BOARD_FIELD_WIDTHS.start}
           />
         </div>
         <div className={styles.field}>
-          <FlapText
+          <TimeField
             delayOffset={rowIndex * 34}
-            tone="white"
+            meridiem={row.endMeridiem}
             value={row.end}
             width={BOARD_FIELD_WIDTHS.end}
           />
@@ -74,6 +74,32 @@ export function BoardRow({ row, rowIndex }: BoardRowProps) {
         </div>
       </div>
     </article>
+  );
+}
+
+function TimeField({
+  delayOffset,
+  meridiem,
+  value,
+  width,
+}: {
+  delayOffset: number;
+  meridiem?: BoardRowData["startMeridiem"];
+  value: string;
+  width: number;
+}) {
+  return (
+    <div className={styles.timeField}>
+      <FlapText delayOffset={delayOffset} tone="white" value={value} width={width} />
+      <span className={styles.timeLights} aria-hidden="true">
+        <span
+          className={`${styles.timeLight} ${meridiem === "am" ? styles.timeLightLit : ""}`}
+        />
+        <span
+          className={`${styles.timeLight} ${meridiem === "pm" ? styles.timeLightLit : ""}`}
+        />
+      </span>
+    </div>
   );
 }
 

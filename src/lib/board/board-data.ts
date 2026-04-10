@@ -44,13 +44,16 @@ export const USER_TONE_LABELS: Record<UserTone, string> = {
 };
 
 export type StatusTone = UserTone;
+export type MeridiemIndicator = "am" | "pm";
 
 export type BoardRowData = {
   id: string;
   date: string;
   name: string;
   start: string;
+  startMeridiem?: MeridiemIndicator;
   end: string;
+  endMeridiem?: MeridiemIndicator;
   status: string;
   statusTone?: StatusTone;
   tone: UserTone;
