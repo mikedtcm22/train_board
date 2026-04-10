@@ -39,7 +39,8 @@ Milestone 3 delivered admin configuration:
 - account email addresses can be mapped to description text colors without editing code
 - the palette now offers 10 stronger color choices for names and statuses
 - status timing, visible status text, and status text colors are persisted from the admin page
-- admin settings are stored locally and immediately drive the live display board
+- admin settings are stored locally in development and in Vercel Blob when deployed
+- persisted admin settings immediately drive the live display board
 
 ## Next Milestone
 

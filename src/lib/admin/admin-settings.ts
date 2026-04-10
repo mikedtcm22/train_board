@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { get, put } from "@vercel/blob";
 import {
   DEFAULT_USER_TONE,
   USER_TONE_OPTIONS,
@@ -23,8 +24,13 @@ type AdminSettingsFile = {
 
 const SETTINGS_DIRECTORY = path.join(process.cwd(), ".local");
 const SETTINGS_PATH = path.join(SETTINGS_DIRECTORY, "admin-settings.json");
+const SETTINGS_BLOB_PATH = "admin/admin-settings.json";
 
 export async function readAdminSettings() {
+  if (hasBlobStorage()) {
+    return readBlobBackedSettings();
+  }
+
   try {
     const fileContents = await fs.readFile(SETTINGS_PATH, "utf8");
     const parsed = JSON.parse(fileContents) as AdminSettingsFile;
@@ -63,17 +69,20 @@ export async function writeStoredToneMappings(
     Object.fromEntries(mappings.map(({ identity, tone }) => [identity, tone])),
   );
 
+  const nextSettings = {
+    statusSettings: currentSettings.statusSettings,
+    toneMappings: Object.fromEntries(normalizedMappings),
+  };
+
+  if (hasBlobStorage()) {
+    await writeBlobBackedSettings(nextSettings);
+    return;
+  }
+
   await fs.mkdir(SETTINGS_DIRECTORY, { recursive: true });
   await fs.writeFile(
     SETTINGS_PATH,
-    JSON.stringify(
-      {
-        statusSettings: currentSettings.statusSettings,
-        toneMappings: Object.fromEntries(normalizedMappings),
-      },
-      null,
-      2,
-    ),
+    JSON.stringify(nextSettings, null, 2),
     "utf8",
   );
 }
@@ -81,17 +90,20 @@ export async function writeStoredToneMappings(
 export async function writeStoredStatusSettings(statusSettings: BoardStatusSettings) {
   const currentSettings = await readAdminSettings();
 
+  const nextSettings = {
+    statusSettings: normalizeStatusSettings(statusSettings),
+    toneMappings: Object.fromEntries(currentSettings.toneMappings),
+  };
+
+  if (hasBlobStorage()) {
+    await writeBlobBackedSettings(nextSettings);
+    return;
+  }
+
   await fs.mkdir(SETTINGS_DIRECTORY, { recursive: true });
   await fs.writeFile(
     SETTINGS_PATH,
-    JSON.stringify(
-      {
-        statusSettings: normalizeStatusSettings(statusSettings),
-        toneMappings: Object.fromEntries(currentSettings.toneMappings),
-      },
-      null,
-      2,
-    ),
+    JSON.stringify(nextSettings, null, 2),
     "utf8",
   );
 }
@@ -216,4 +228,38 @@ function normalizeMinutes(value: number | undefined, fallback: number) {
 
   const rounded = Math.round(value as number);
   return Math.max(1, Math.min(180, rounded));
+}
+
+function hasBlobStorage() {
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+}
+
+async function readBlobBackedSettings() {
+  const result = await get(SETTINGS_BLOB_PATH, {
+    access: "private",
+  });
+
+  if (!result || result.statusCode !== 200) {
+    return {
+      statusSettings: DEFAULT_STATUS_SETTINGS,
+      toneMappings: new Map<string, UserTone>(),
+    };
+  }
+
+  const fileContents = await new Response(result.stream).text();
+  const parsed = JSON.parse(fileContents) as AdminSettingsFile;
+
+  return {
+    statusSettings: normalizeStatusSettings(parsed.statusSettings),
+    toneMappings: normalizeToneMappings(parsed.toneMappings ?? {}),
+  };
+}
+
+async function writeBlobBackedSettings(settings: AdminSettingsFile) {
+  await put(SETTINGS_BLOB_PATH, JSON.stringify(settings, null, 2), {
+    access: "private",
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    contentType: "application/json",
+  });
 }
