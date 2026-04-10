@@ -56,7 +56,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 0.45rem 0.45rem 0.55rem;
+  padding: 0.6rem 0.75rem 0.8rem;
   overflow: hidden;
 }
 
@@ -66,9 +66,6 @@
 }
 
 .boardContent {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   width: max-content;
   transform-origin: top center;
   will-change: transform;
@@ -108,14 +105,12 @@
 .boardGrid {
   display: grid;
   align-content: start;
-  justify-content: start;
-  justify-self: start;
-  width: max-content;
+  justify-content: center;
   padding:
     0
     clamp(0.45rem, 0.9vw, 0.82rem)
     clamp(0.48rem, 0.82vw, 0.72rem);
-  overflow: visible;
+  overflow-x: auto;
 }
 
 .headerRow,

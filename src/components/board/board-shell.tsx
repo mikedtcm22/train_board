@@ -29,8 +29,8 @@ const HEADER_FIELDS = [
   { label: "STATUS", width: BOARD_FIELD_WIDTHS.status },
 ] as const;
 
-const BOARD_FIT_SAFE_WIDTH_PX = 32;
-const BOARD_FIT_SAFE_HEIGHT_PX = 20;
+const BOARD_FIT_SAFE_WIDTH_PX = 40;
+const BOARD_FIT_SAFE_HEIGHT_PX = 48;
 
 export function BoardShell({
   currentDateLabel,
@@ -42,7 +42,6 @@ export function BoardShell({
   snapshot,
 }: BoardShellProps) {
   const surfaceRef = useRef<HTMLElement | null>(null);
-  const viewportRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const [fitScale, setFitScale] = useState(1);
   const [scaledSize, setScaledSize] = useState<{ height: number; width: number } | null>(
@@ -51,10 +50,9 @@ export function BoardShell({
 
   useEffect(() => {
     const surface = surfaceRef.current;
-    const viewport = viewportRef.current;
     const content = contentRef.current;
 
-    if (!surface || !viewport || !content) {
+    if (!surface || !content) {
       return;
     }
 
@@ -66,21 +64,8 @@ export function BoardShell({
         return;
       }
 
-      const viewportStyles = window.getComputedStyle(viewport);
-      const viewportPaddingX =
-        Number.parseFloat(viewportStyles.paddingLeft) +
-        Number.parseFloat(viewportStyles.paddingRight);
-      const viewportPaddingY =
-        Number.parseFloat(viewportStyles.paddingTop) +
-        Number.parseFloat(viewportStyles.paddingBottom);
-      const availableWidth = Math.max(
-        viewport.clientWidth - viewportPaddingX - BOARD_FIT_SAFE_WIDTH_PX,
-        1,
-      );
-      const availableHeight = Math.max(
-        viewport.clientHeight - viewportPaddingY - BOARD_FIT_SAFE_HEIGHT_PX,
-        1,
-      );
+      const availableWidth = Math.max(surface.clientWidth - BOARD_FIT_SAFE_WIDTH_PX, 1);
+      const availableHeight = Math.max(surface.clientHeight - BOARD_FIT_SAFE_HEIGHT_PX, 1);
       const nextScale = Math.min(
         1,
         availableWidth / naturalWidth,
@@ -100,7 +85,6 @@ export function BoardShell({
     });
 
     resizeObserver.observe(surface);
-    resizeObserver.observe(viewport);
     resizeObserver.observe(content);
     window.addEventListener("resize", measure);
 
@@ -117,7 +101,7 @@ export function BoardShell({
         {isFullscreen ? "Exit Full Screen" : "Full Screen"}
       </button>
       <section className={styles.boardSurface} ref={surfaceRef}>
-        <div className={styles.boardViewport} ref={viewportRef}>
+        <div className={styles.boardViewport}>
           <div
             className={styles.boardScaleShell}
             style={
