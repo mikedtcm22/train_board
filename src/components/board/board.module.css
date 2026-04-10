@@ -181,12 +181,12 @@
   flex-direction: column;
   justify-content: space-between;
   align-self: stretch;
-  padding-block: clamp(0.24rem, 0.4vw, 0.34rem);
+  padding-block: clamp(0.18rem, 0.3vw, 0.26rem);
 }
 
 .timeLight {
-  width: clamp(0.28rem, 0.4vw, 0.38rem);
-  height: clamp(0.28rem, 0.4vw, 0.38rem);
+  width: clamp(0.32rem, 0.46vw, 0.44rem);
+  height: clamp(0.32rem, 0.46vw, 0.44rem);
   border-radius: 999px;
   background: rgba(255, 215, 102, 0.14);
   box-shadow:
