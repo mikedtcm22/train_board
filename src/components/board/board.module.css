@@ -177,21 +177,31 @@
 }
 
 .timeLights {
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: space-between;
+  position: relative;
   align-self: stretch;
-  padding-block: clamp(0.18rem, 0.3vw, 0.26rem);
+  width: clamp(0.32rem, 0.46vw, 0.44rem);
+  min-height: var(--board-cell-height);
 }
 
 .timeLight {
+  position: absolute;
+  left: 50%;
   width: clamp(0.32rem, 0.46vw, 0.44rem);
   height: clamp(0.32rem, 0.46vw, 0.44rem);
   border-radius: 999px;
   background: rgba(255, 215, 102, 0.14);
+  transform: translate(-50%, -50%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 0 0 1px rgba(0, 0, 0, 0.28);
+}
+
+.timeLight:first-child {
+  top: 25%;
+}
+
+.timeLight:last-child {
+  top: 75%;
 }
 
 .timeLightLit {
