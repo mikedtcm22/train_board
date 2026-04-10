@@ -67,7 +67,7 @@
 
 .boardContent {
   width: max-content;
-  transform-origin: top center;
+  transform-origin: top left;
   will-change: transform;
 }
 
