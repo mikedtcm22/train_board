@@ -1,10 +1,10 @@
 import {
   BOARD_FIELD_WIDTHS,
+  BOARD_HEADER_WIDTH,
   type UserTone,
   type BoardSnapshot,
 } from "@/lib/board/board-data";
 import { BoardRow } from "./board-row";
-import { DigitalHeader } from "./digital-header";
 import { FlapText } from "./flap-text";
 import styles from "./board.module.css";
 
@@ -43,7 +43,12 @@ export function BoardShell({
       <section className={styles.boardSurface}>
         <div className={styles.boardTopbar}>
           <div className={styles.bannerPanel}>
-            <DigitalHeader tone={headerTone} value={headerMessage} />
+            <FlapText
+              size="banner"
+              tone={headerTone}
+              value={headerMessage}
+              width={BOARD_HEADER_WIDTH}
+            />
           </div>
           <div className={styles.nowPanel}>
             <div className={styles.nowStack}>
