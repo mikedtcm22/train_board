@@ -1,3 +1,5 @@
+import { readStoredHeaderMessage } from "@/lib/admin/admin-settings";
+import { DEFAULT_BOARD_HEADER_MESSAGE } from "./board-data";
 import { listGoogleCalendarEvents } from "@/lib/calendar/google-calendar";
 import { buildBoardRowsFromCalendarEvents } from "./live-board-data";
 import { createBoardDisplayPayload } from "./display-payload";
@@ -7,6 +9,8 @@ const DEMO_POLL_INTERVAL_MS = 3800;
 const LIVE_POLL_INTERVAL_MS = 30_000;
 
 export async function getBoardDisplayPayload(now = new Date()) {
+  const headerMessage = await getHeaderMessage();
+
   try {
     const liveCalendar = await listGoogleCalendarEvents(now);
     const rows = buildBoardRowsFromCalendarEvents({
@@ -19,6 +23,7 @@ export async function getBoardDisplayPayload(now = new Date()) {
     });
 
     return createBoardDisplayPayload({
+      headerMessage,
       mode: "live",
       now,
       pollIntervalMs: LIVE_POLL_INTERVAL_MS,
@@ -27,6 +32,7 @@ export async function getBoardDisplayPayload(now = new Date()) {
     });
   } catch (error) {
     return createBoardDisplayPayload({
+      headerMessage,
       issue: formatIssue(error),
       mode: "demo",
       now,
@@ -48,4 +54,12 @@ function formatIssue(error: unknown) {
 function getDemoSnapshot(now: Date) {
   const index = Math.floor(now.getTime() / DEMO_POLL_INTERVAL_MS) % demoSnapshots.length;
   return demoSnapshots[index];
+}
+
+async function getHeaderMessage() {
+  try {
+    return await readStoredHeaderMessage();
+  } catch {
+    return DEFAULT_BOARD_HEADER_MESSAGE;
+  }
 }

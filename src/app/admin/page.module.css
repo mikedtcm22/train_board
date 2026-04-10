@@ -307,6 +307,13 @@
   outline-offset: 2px;
 }
 
+.inputHint {
+  color: rgba(248, 237, 207, 0.56);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;

@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DEMO_ROW_COUNT, padBoardRows } from "@/lib/board/board-data";
+import {
+  DEFAULT_BOARD_HEADER_MESSAGE,
+  DEMO_ROW_COUNT,
+  padBoardRows,
+} from "@/lib/board/board-data";
 import {
   demoSnapshots,
 } from "@/lib/board/demo-board-data";
@@ -100,6 +104,7 @@ export function BoardDemo() {
   return (
     <BoardShell
       currentDateLabel={currentDateLabel}
+      headerMessage={DEFAULT_BOARD_HEADER_MESSAGE}
       currentTimeLabel={currentTimeLabel}
       isFullscreen={isFullscreen}
       onFullscreenToggle={toggleFullscreen}

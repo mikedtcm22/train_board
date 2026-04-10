@@ -2,10 +2,13 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { get, put } from "@vercel/blob";
 import {
+  BOARD_HEADER_TEXT_MAX_LENGTH,
+  DEFAULT_BOARD_HEADER_MESSAGE,
   DEFAULT_USER_TONE,
   USER_TONE_OPTIONS,
   type UserTone,
 } from "@/lib/board/board-data";
+import { formatBoardText } from "@/lib/board/format-board";
 import {
   DEFAULT_STATUS_SETTINGS,
   STATUS_TEXT_MAX_LENGTH,
@@ -13,6 +16,7 @@ import {
 } from "@/lib/board/status-rules";
 
 type AdminSettingsFile = {
+  headerMessage?: string;
   statusSettings?: {
     almostOverMinutes?: number;
     labels?: Partial<BoardStatusSettings["labels"]>;
@@ -36,12 +40,14 @@ export async function readAdminSettings() {
     const parsed = JSON.parse(fileContents) as AdminSettingsFile;
 
     return {
+      headerMessage: normalizeHeaderMessage(parsed.headerMessage),
       statusSettings: normalizeStatusSettings(parsed.statusSettings),
       toneMappings: normalizeToneMappings(parsed.toneMappings ?? {}),
     };
   } catch (error) {
     if (isMissingFileError(error)) {
       return {
+        headerMessage: DEFAULT_BOARD_HEADER_MESSAGE,
         statusSettings: DEFAULT_STATUS_SETTINGS,
         toneMappings: new Map<string, UserTone>(),
       };
@@ -54,6 +60,11 @@ export async function readAdminSettings() {
 export async function readStoredToneMappings() {
   const settings = await readAdminSettings();
   return settings.toneMappings;
+}
+
+export async function readStoredHeaderMessage() {
+  const settings = await readAdminSettings();
+  return settings.headerMessage;
 }
 
 export async function readStoredStatusSettings() {
@@ -70,6 +81,7 @@ export async function writeStoredToneMappings(
   );
 
   const nextSettings = {
+    headerMessage: currentSettings.headerMessage,
     statusSettings: currentSettings.statusSettings,
     toneMappings: Object.fromEntries(normalizedMappings),
   };
@@ -91,7 +103,30 @@ export async function writeStoredStatusSettings(statusSettings: BoardStatusSetti
   const currentSettings = await readAdminSettings();
 
   const nextSettings = {
+    headerMessage: currentSettings.headerMessage,
     statusSettings: normalizeStatusSettings(statusSettings),
+    toneMappings: Object.fromEntries(currentSettings.toneMappings),
+  };
+
+  if (hasBlobStorage()) {
+    await writeBlobBackedSettings(nextSettings);
+    return;
+  }
+
+  await fs.mkdir(SETTINGS_DIRECTORY, { recursive: true });
+  await fs.writeFile(
+    SETTINGS_PATH,
+    JSON.stringify(nextSettings, null, 2),
+    "utf8",
+  );
+}
+
+export async function writeStoredHeaderMessage(headerMessage: string) {
+  const currentSettings = await readAdminSettings();
+
+  const nextSettings = {
+    headerMessage: normalizeHeaderMessage(headerMessage),
+    statusSettings: currentSettings.statusSettings,
     toneMappings: Object.fromEntries(currentSettings.toneMappings),
   };
 
@@ -221,6 +256,12 @@ function normalizeStatusLabel(value: string | undefined, fallback: string) {
   return normalized.slice(0, STATUS_TEXT_MAX_LENGTH);
 }
 
+function normalizeHeaderMessage(value: string | undefined) {
+  const normalized = formatBoardText(value ?? "", BOARD_HEADER_TEXT_MAX_LENGTH).trimEnd();
+
+  return normalized || DEFAULT_BOARD_HEADER_MESSAGE;
+}
+
 function normalizeMinutes(value: number | undefined, fallback: number) {
   if (!Number.isFinite(value)) {
     return fallback;
@@ -241,6 +282,7 @@ async function readBlobBackedSettings() {
 
   if (!result || result.statusCode !== 200) {
     return {
+      headerMessage: DEFAULT_BOARD_HEADER_MESSAGE,
       statusSettings: DEFAULT_STATUS_SETTINGS,
       toneMappings: new Map<string, UserTone>(),
     };
@@ -250,6 +292,7 @@ async function readBlobBackedSettings() {
   const parsed = JSON.parse(fileContents) as AdminSettingsFile;
 
   return {
+    headerMessage: normalizeHeaderMessage(parsed.headerMessage),
     statusSettings: normalizeStatusSettings(parsed.statusSettings),
     toneMappings: normalizeToneMappings(parsed.toneMappings ?? {}),
   };

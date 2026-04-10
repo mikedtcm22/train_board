@@ -7,6 +7,7 @@ import {
 } from "./board-data";
 
 type CreateBoardDisplayPayloadArgs = {
+  headerMessage: string;
   issue?: string;
   mode: BoardDisplayMode;
   now?: Date;
@@ -16,6 +17,7 @@ type CreateBoardDisplayPayloadArgs = {
 };
 
 export function createBoardDisplayPayload({
+  headerMessage,
   issue,
   mode,
   now = new Date(),
@@ -25,12 +27,13 @@ export function createBoardDisplayPayload({
 }: CreateBoardDisplayPayloadArgs): BoardDisplayPayload {
   const paddedRows = padBoardRows(rows);
   const version = createHash("sha1")
-    .update(JSON.stringify(paddedRows))
+    .update(JSON.stringify({ headerMessage, rows: paddedRows }))
     .digest("hex")
     .slice(0, 12);
 
   return {
     generatedAt: now.toISOString(),
+    headerMessage,
     issue,
     mode,
     pollIntervalMs,

@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { padBoardRows, type BoardDisplayPayload } from "@/lib/board/board-data";
+import {
+  DEFAULT_BOARD_HEADER_MESSAGE,
+  padBoardRows,
+  type BoardDisplayPayload,
+} from "@/lib/board/board-data";
 import { BoardShell } from "./board-shell";
 
 const CLOCK_UPDATE_MS = 30_000;
@@ -106,6 +110,7 @@ export function BoardDisplay({ initialPayload }: BoardDisplayProps) {
   return (
     <BoardShell
       currentDateLabel={currentDateLabel}
+      headerMessage={payload.headerMessage || DEFAULT_BOARD_HEADER_MESSAGE}
       currentTimeLabel={currentTimeLabel}
       isFullscreen={isFullscreen}
       onFullscreenToggle={toggleFullscreen}

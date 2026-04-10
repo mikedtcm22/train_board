@@ -1,10 +1,15 @@
-import { BOARD_FIELD_WIDTHS, type BoardSnapshot } from "@/lib/board/board-data";
+import {
+  BOARD_FIELD_WIDTHS,
+  BOARD_HEADER_WIDTH,
+  type BoardSnapshot,
+} from "@/lib/board/board-data";
 import { BoardRow } from "./board-row";
 import { FlapText } from "./flap-text";
 import styles from "./board.module.css";
 
 type BoardShellProps = {
   currentDateLabel: string;
+  headerMessage: string;
   currentTimeLabel: string;
   isFullscreen: boolean;
   onFullscreenToggle: () => void;
@@ -21,6 +26,7 @@ const HEADER_FIELDS = [
 
 export function BoardShell({
   currentDateLabel,
+  headerMessage,
   currentTimeLabel,
   isFullscreen,
   onFullscreenToggle,
@@ -33,6 +39,14 @@ export function BoardShell({
       </button>
       <section className={styles.boardSurface}>
         <div className={styles.boardTopbar}>
+          <div className={styles.bannerPanel}>
+            <FlapText
+              size="banner"
+              tone="header"
+              value={headerMessage}
+              width={BOARD_HEADER_WIDTH}
+            />
+          </div>
           <div className={styles.nowPanel}>
             <div className={styles.nowStack}>
               <FlapText

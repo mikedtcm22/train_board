@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { BOARD_CHARACTER_ORDER } from "@/lib/board/format-board";
-import type { BoardTone } from "./flap-text";
+import type { BoardCellSize, BoardTone } from "./flap-text";
 import styles from "./board.module.css";
 
 type FlapCellProps = {
   animated?: boolean;
   char: string;
   delayMs: number;
+  size: BoardCellSize;
   tone: BoardTone;
 };
 
@@ -19,6 +20,7 @@ export function FlapCell({
   animated = true,
   char,
   delayMs,
+  size,
   tone,
 }: FlapCellProps) {
   const nextChar = char || " ";
@@ -110,16 +112,20 @@ export function FlapCell({
   return (
     <span
       aria-hidden="true"
-      className={`${styles.cell} ${toneClass} ${visibleFlipping ? styles.cellFlipping : ""}`}
+      className={`${styles.cell} ${size === "banner" ? styles.cellBanner : ""} ${toneClass} ${visibleFlipping ? styles.cellFlipping : ""}`}
       style={{ ["--flip-delay" as string]: `${delayMs}ms` }}
     >
       <span className={styles.cellTop}>
-        <span className={`${styles.halfGlyph} ${styles.halfGlyphTop}`}>
+        <span
+          className={`${styles.halfGlyph} ${size === "banner" ? styles.halfGlyphBanner : ""} ${styles.halfGlyphTop}`}
+        >
           {visibleCurrentChar}
         </span>
       </span>
       <span className={styles.cellBottom}>
-        <span className={`${styles.halfGlyph} ${styles.halfGlyphBottom}`}>
+        <span
+          className={`${styles.halfGlyph} ${size === "banner" ? styles.halfGlyphBanner : ""} ${styles.halfGlyphBottom}`}
+        >
           {visibleFlipping ? visiblePendingChar : visibleCurrentChar}
         </span>
       </span>
@@ -127,12 +133,16 @@ export function FlapCell({
       {visibleFlipping ? (
         <>
           <span className={styles.flipTop}>
-            <span className={`${styles.halfGlyph} ${styles.halfGlyphTop}`}>
+            <span
+              className={`${styles.halfGlyph} ${size === "banner" ? styles.halfGlyphBanner : ""} ${styles.halfGlyphTop}`}
+            >
               {visibleCurrentChar}
             </span>
           </span>
           <span className={styles.flipBottom}>
-            <span className={`${styles.halfGlyph} ${styles.halfGlyphBottom}`}>
+            <span
+              className={`${styles.halfGlyph} ${size === "banner" ? styles.halfGlyphBanner : ""} ${styles.halfGlyphBottom}`}
+            >
               {visiblePendingChar}
             </span>
           </span>

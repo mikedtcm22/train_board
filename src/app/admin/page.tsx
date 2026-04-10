@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AdminColorMappings } from "./admin-color-mappings";
+import { AdminHeaderSettings } from "./admin-header-settings";
 import { AdminStatusSettings } from "./admin-status-settings";
 import { getCalendarIntegrationSummary } from "@/lib/calendar/google-calendar";
 import styles from "./page.module.css";
@@ -11,11 +12,11 @@ export default function AdminPage() {
     <main className={styles.page}>
       <section className={styles.panel}>
         <p className={styles.eyebrow}>Milestone 3 Admin</p>
-        <h1 className={styles.title}>Account Color Mapping</h1>
+        <h1 className={styles.title}>Display Settings</h1>
         <p className={styles.copy}>
-          The display remains read-only. Manage shared-calendar account colors here
-          from a separate admin page, then let the monitor continue running only the
-          full-screen board.
+          The display remains read-only. Manage the board header, shared-calendar
+          account colors, and status behavior here from a separate admin page, then
+          let the monitor continue running only the full-screen board.
         </p>
         <div className={styles.grid}>
           <section className={styles.subpanel}>
@@ -51,9 +52,9 @@ export default function AdminPage() {
           <section className={styles.subpanel}>
             <h2 className={styles.sectionTitle}>Admin Scope</h2>
             <p className={styles.copySmall}>
-              This admin route is intentionally separate from the display route. The
-              only live configuration here is which color each shared Google account
-              uses for description text on the board.
+              This admin route is intentionally separate from the display route. Use
+              it to manage the large board header, account color mapping, and status
+              behavior while the monitor stays on the read-only display.
             </p>
             {integration.missing.length > 0 ? (
               <p className={styles.warning}>
@@ -67,6 +68,7 @@ export default function AdminPage() {
           </section>
         </div>
 
+        <AdminHeaderSettings />
         <AdminColorMappings />
         <AdminStatusSettings />
 

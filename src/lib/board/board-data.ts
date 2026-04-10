@@ -8,6 +8,9 @@ export const BOARD_FIELD_WIDTHS = {
 
 export const BOARD_ROW_COUNT = 7;
 export const DEMO_ROW_COUNT = BOARD_ROW_COUNT;
+export const BOARD_HEADER_WIDTH = 20;
+export const BOARD_HEADER_TEXT_MAX_LENGTH = BOARD_HEADER_WIDTH;
+export const DEFAULT_BOARD_HEADER_MESSAGE = "FAMILY CALENDAR";
 
 export const USER_TONE_OPTIONS = [
   "yellow",
@@ -60,6 +63,7 @@ export type BoardDisplayMode = "demo" | "live";
 
 export type BoardDisplayPayload = {
   generatedAt: string;
+  headerMessage: string;
   issue?: string;
   mode: BoardDisplayMode;
   pollIntervalMs: number;
