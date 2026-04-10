@@ -50,6 +50,27 @@
   overflow: hidden;
 }
 
+.boardViewport {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0.6rem 0.75rem 0.8rem;
+  overflow: hidden;
+}
+
+.boardScaleShell {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.boardContent {
+  width: max-content;
+  transform-origin: top center;
+  will-change: transform;
+}
+
 .boardTopbar {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
