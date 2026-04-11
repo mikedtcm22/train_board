@@ -6,7 +6,7 @@ export const BOARD_FIELD_WIDTHS = {
   status: 13,
 } as const;
 
-export const BOARD_ROW_COUNT = 5;
+export const BOARD_ROW_COUNT = 7;
 export const DEMO_ROW_COUNT = BOARD_ROW_COUNT;
 export const BOARD_HEADER_WIDTH = 20;
 export const BOARD_HEADER_TEXT_MAX_LENGTH = BOARD_HEADER_WIDTH;
