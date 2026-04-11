@@ -27,8 +27,8 @@
 }
 
 .boardSurface {
-  --board-cell-height: clamp(2.7rem, 4.2vw, 4.8rem);
-  --board-cell-width: clamp(1.04rem, 1.52vw, 1.68rem);
+  --board-cell-height: clamp(3.105rem, 4.83vw, 5.52rem);
+  --board-cell-width: clamp(1.196rem, 1.748vw, 1.932rem);
   --board-cell-gap: clamp(0.04rem, 0.07vw, 0.07rem);
   width: 100%;
   min-height: calc(100vh - clamp(1.2rem, 2.4vw, 2.2rem));
@@ -179,7 +179,7 @@
 .rowMarker {
   display: block;
   width: 0.32rem;
-  min-height: 4.52rem;
+  min-height: 5.2rem;
   border-radius: 999px;
   background: var(--marker-color, rgba(236, 241, 235, 0.42));
   box-shadow:
@@ -381,7 +381,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(1.52rem, 2.26vw, 2.62rem);
+  font-size: clamp(1.748rem, 2.599vw, 3.013rem);
   font-weight: 600;
   line-height: 1;
   letter-spacing: 0.01em;
