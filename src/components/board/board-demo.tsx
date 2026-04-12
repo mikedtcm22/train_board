@@ -1,19 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   DEFAULT_BOARD_HEADER_MESSAGE,
   DEFAULT_BOARD_HEADER_TONE,
-  DEMO_ROW_COUNT,
   padBoardRows,
 } from "@/lib/board/board-data";
+import { buildRowCascadePlan } from "@/lib/board/row-animation";
 import {
   demoSnapshots,
 } from "@/lib/board/demo-board-data";
 import { BoardShell } from "./board-shell";
 
 const DEMO_HOLD_MS = 3800;
-const DEMO_ROW_STEP_MS = 740;
 const CLOCK_UPDATE_MS = 1000 * 30;
 
 export function BoardDemo() {
@@ -23,6 +22,11 @@ export function BoardDemo() {
   );
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [now, setNow] = useState(() => new Date());
+  const displayedRowsRef = useRef(displayedRows);
+
+  useEffect(() => {
+    displayedRowsRef.current = displayedRows;
+  }, [displayedRows]);
 
   const toggleFullscreen = async () => {
     if (document.fullscreenElement) {
@@ -49,10 +53,11 @@ export function BoardDemo() {
     const nextSnapshotIndex = (snapshotIndex + 1) % demoSnapshots.length;
     const nextRows = padBoardRows(demoSnapshots[nextSnapshotIndex].rows);
     const timeoutIds: number[] = [];
+    const updateSteps = buildRowCascadePlan(displayedRowsRef.current, nextRows);
 
     timeoutIds.push(
       window.setTimeout(() => {
-        for (let rowIndex = 0; rowIndex < DEMO_ROW_COUNT; rowIndex += 1) {
+        updateSteps.forEach(({ delayMs, rowIndex }) => {
           timeoutIds.push(
             window.setTimeout(() => {
               setDisplayedRows((currentRows) => {
@@ -60,14 +65,14 @@ export function BoardDemo() {
                 updatedRows[rowIndex] = nextRows[rowIndex];
                 return updatedRows;
               });
-            }, rowIndex * DEMO_ROW_STEP_MS),
+            }, delayMs),
           );
-        }
+        });
 
         timeoutIds.push(
           window.setTimeout(() => {
             setSnapshotIndex(nextSnapshotIndex);
-          }, DEMO_ROW_COUNT * DEMO_ROW_STEP_MS),
+          }, (updateSteps.at(-1)?.delayMs ?? 0) + DEMO_HOLD_MS / 2),
         );
       }, DEMO_HOLD_MS),
     );

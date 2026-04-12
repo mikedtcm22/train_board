@@ -7,6 +7,7 @@ import {
   padBoardRows,
   type BoardDisplayPayload,
 } from "@/lib/board/board-data";
+import { buildRowCascadePlan } from "@/lib/board/row-animation";
 import { BoardShell } from "./board-shell";
 
 const CLOCK_UPDATE_MS = 30_000;
@@ -23,10 +24,16 @@ export function BoardDisplay({ initialPayload }: BoardDisplayProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [now, setNow] = useState(() => new Date());
   const payloadRef = useRef(payload);
+  const displayedRowsRef = useRef(displayedRows);
+  const pendingRowTimeoutsRef = useRef<number[]>([]);
 
   useEffect(() => {
     payloadRef.current = payload;
   }, [payload]);
+
+  useEffect(() => {
+    displayedRowsRef.current = displayedRows;
+  }, [displayedRows]);
 
   const toggleFullscreen = async () => {
     if (document.fullscreenElement) {
@@ -69,7 +76,28 @@ export function BoardDisplay({ initialPayload }: BoardDisplayProps) {
         setPayload(nextPayload);
 
         if (rowsChanged) {
-          setDisplayedRows(padBoardRows(nextPayload.rows));
+          const nextRows = padBoardRows(nextPayload.rows);
+          const currentRows = displayedRowsRef.current;
+          const updateSteps = buildRowCascadePlan(currentRows, nextRows);
+
+          pendingRowTimeoutsRef.current.forEach((timeoutId) => window.clearTimeout(timeoutId));
+          pendingRowTimeoutsRef.current = [];
+
+          if (updateSteps.length === 0) {
+            return;
+          }
+
+          updateSteps.forEach(({ delayMs, rowIndex }) => {
+            const timeoutId = window.setTimeout(() => {
+              setDisplayedRows((existingRows) => {
+                const updatedRows = [...existingRows];
+                updatedRows[rowIndex] = nextRows[rowIndex];
+                return updatedRows;
+              });
+            }, delayMs);
+
+            pendingRowTimeoutsRef.current.push(timeoutId);
+          });
         }
       } catch {
         // Keep rendering the current board state if a poll fails.
@@ -80,6 +108,8 @@ export function BoardDisplay({ initialPayload }: BoardDisplayProps) {
 
     return () => {
       window.clearInterval(intervalId);
+      pendingRowTimeoutsRef.current.forEach((timeoutId) => window.clearTimeout(timeoutId));
+      pendingRowTimeoutsRef.current = [];
     };
   }, [payload.pollIntervalMs]);
 
