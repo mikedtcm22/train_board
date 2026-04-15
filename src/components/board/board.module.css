@@ -365,11 +365,11 @@
 }
 
 .cellFlipping .flipTop {
-  animation: flapTop 88ms cubic-bezier(0.52, 0.06, 0.82, 0.34) var(--flip-delay) both;
+  animation: flapTop 136ms cubic-bezier(0.52, 0.06, 0.82, 0.34) var(--flip-delay) both;
 }
 
 .cellFlipping .flipBottom {
-  animation: flapBottom 96ms cubic-bezier(0.18, 0.78, 0.34, 1) calc(var(--flip-delay) + 44ms) both;
+  animation: flapBottom 148ms cubic-bezier(0.18, 0.78, 0.34, 1) calc(var(--flip-delay) + 68ms) both;
 }
 
 .halfGlyph {

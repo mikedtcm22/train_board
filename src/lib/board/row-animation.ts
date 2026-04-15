@@ -3,7 +3,7 @@ import { BOARD_FIELD_WIDTHS } from "./board-data";
 import { FLAP_STEP_INTERVAL_MS, FLAP_STEP_SETTLE_MS, getVisibleFlipStepCount } from "./flap-animation";
 import { formatBoardText } from "./format-board";
 
-const ROW_ANIMATION_BUFFER_MS = 180;
+const ROW_ANIMATION_BUFFER_MS = 320;
 
 const ROW_FIELDS = [
   { key: "date", width: BOARD_FIELD_WIDTHS.date },

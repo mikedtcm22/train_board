@@ -1,8 +1,7 @@
 import { BOARD_CHARACTER_ORDER } from "./format-board";
 
-export const FLAP_STEP_INTERVAL_MS = 128;
-export const FLAP_STEP_SETTLE_MS = 112;
-export const FLAP_MAX_VISIBLE_STEPS = 9;
+export const FLAP_STEP_INTERVAL_MS = 180;
+export const FLAP_STEP_SETTLE_MS = 160;
 
 export function buildVisibleFlipSequence(fromChar: string, toChar: string) {
   const safeFromChar = BOARD_CHARACTER_ORDER.includes(fromChar as never) ? fromChar : " ";
@@ -20,9 +19,8 @@ export function buildVisibleFlipSequence(fromChar: string, toChar: string) {
     return [];
   }
 
-  const visibleOffsets = buildVisibleOffsets(forwardDistance, FLAP_MAX_VISIBLE_STEPS);
-
-  return visibleOffsets.map((offset) => {
+  return Array.from({ length: forwardDistance }, (_, stepIndex) => {
+    const offset = stepIndex + 1;
     const nextIndex = (fromIndex + offset) % BOARD_CHARACTER_ORDER.length;
     return BOARD_CHARACTER_ORDER[nextIndex];
   });
@@ -30,26 +28,4 @@ export function buildVisibleFlipSequence(fromChar: string, toChar: string) {
 
 export function getVisibleFlipStepCount(fromChar: string, toChar: string) {
   return buildVisibleFlipSequence(fromChar, toChar).length;
-}
-
-function buildVisibleOffsets(totalSteps: number, maxVisibleSteps: number) {
-  if (totalSteps <= maxVisibleSteps) {
-    return Array.from({ length: totalSteps }, (_, stepIndex) => stepIndex + 1);
-  }
-
-  const offsets: number[] = [];
-  let previousOffset = 0;
-
-  for (let visibleStepIndex = 1; visibleStepIndex <= maxVisibleSteps; visibleStepIndex += 1) {
-    const remainingSlots = maxVisibleSteps - visibleStepIndex;
-    const minOffset = previousOffset + 1;
-    const maxOffset = totalSteps - remainingSlots;
-    const projectedOffset = Math.round((visibleStepIndex * totalSteps) / maxVisibleSteps);
-    const nextOffset = Math.max(minOffset, Math.min(maxOffset, projectedOffset));
-
-    offsets.push(nextOffset);
-    previousOffset = nextOffset;
-  }
-
-  return offsets;
 }
