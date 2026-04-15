@@ -1,9 +1,8 @@
 import type { BoardRowData } from "./board-data";
 import { BOARD_FIELD_WIDTHS } from "./board-data";
-import { BOARD_CHARACTER_ORDER, formatBoardText } from "./format-board";
+import { FLAP_STEP_INTERVAL_MS, FLAP_STEP_SETTLE_MS, getVisibleFlipStepCount } from "./flap-animation";
+import { formatBoardText } from "./format-board";
 
-const FLAP_STEP_INTERVAL_MS = 82;
-const FLAP_STEP_SETTLE_MS = 74;
 const ROW_ANIMATION_BUFFER_MS = 180;
 
 const ROW_FIELDS = [
@@ -83,7 +82,7 @@ function getTextAnimationDuration(fromValue: string, toValue: string, width: num
 
   return fromChars.reduce((maxDuration, fromChar, index) => {
     const toChar = toChars[index] ?? " ";
-    const stepCount = getForwardDistance(fromChar, toChar);
+    const stepCount = getVisibleFlipStepCount(fromChar, toChar);
 
     if (stepCount === 0) {
       return maxDuration;
@@ -94,17 +93,4 @@ function getTextAnimationDuration(fromValue: string, toValue: string, width: num
       (stepCount - 1) * FLAP_STEP_INTERVAL_MS + FLAP_STEP_SETTLE_MS,
     );
   }, 0);
-}
-
-function getForwardDistance(fromChar: string, toChar: string) {
-  const safeFromChar = BOARD_CHARACTER_ORDER.includes(fromChar as never) ? fromChar : " ";
-  const safeToChar = BOARD_CHARACTER_ORDER.includes(toChar as never) ? toChar : " ";
-  const fromIndex = BOARD_CHARACTER_ORDER.indexOf(
-    safeFromChar as (typeof BOARD_CHARACTER_ORDER)[number],
-  );
-  const toIndex = BOARD_CHARACTER_ORDER.indexOf(
-    safeToChar as (typeof BOARD_CHARACTER_ORDER)[number],
-  );
-
-  return (toIndex - fromIndex + BOARD_CHARACTER_ORDER.length) % BOARD_CHARACTER_ORDER.length;
 }

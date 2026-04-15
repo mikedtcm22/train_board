@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BOARD_CHARACTER_ORDER } from "@/lib/board/format-board";
+import { buildVisibleFlipSequence, FLAP_STEP_INTERVAL_MS, FLAP_STEP_SETTLE_MS } from "@/lib/board/flap-animation";
 import type { BoardCellSize, BoardTone } from "./flap-text";
 import styles from "./board.module.css";
 
@@ -12,9 +12,6 @@ type FlapCellProps = {
   size: BoardCellSize;
   tone: BoardTone;
 };
-
-const STEP_INTERVAL_MS = 82;
-const STEP_SETTLE_MS = 74;
 
 export function FlapCell({
   animated = true,
@@ -64,11 +61,11 @@ export function FlapCell({
       return;
     }
 
-    const sequence = buildFlipSequence(startingChar, nextChar);
+    const sequence = buildVisibleFlipSequence(startingChar, nextChar);
 
     sequence.forEach((sequenceChar, stepIndex) => {
-      const startAt = delayMs + stepIndex * STEP_INTERVAL_MS;
-      const settleAt = startAt + STEP_SETTLE_MS;
+      const startAt = delayMs + stepIndex * FLAP_STEP_INTERVAL_MS;
+      const settleAt = startAt + FLAP_STEP_SETTLE_MS;
 
       timeoutIdsRef.current.push(
         window.setTimeout(() => {
@@ -154,19 +151,4 @@ export function FlapCell({
 
 function capitalize(value: string) {
   return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
-}
-
-function buildFlipSequence(fromChar: string, toChar: string) {
-  const safeFromChar = BOARD_CHARACTER_ORDER.includes(fromChar as never) ? fromChar : " ";
-  const safeToChar = BOARD_CHARACTER_ORDER.includes(toChar as never) ? toChar : " ";
-  const fromIndex = BOARD_CHARACTER_ORDER.indexOf(safeFromChar as (typeof BOARD_CHARACTER_ORDER)[number]);
-  const toIndex = BOARD_CHARACTER_ORDER.indexOf(safeToChar as (typeof BOARD_CHARACTER_ORDER)[number]);
-  const forwardDistance =
-    (toIndex - fromIndex + BOARD_CHARACTER_ORDER.length) % BOARD_CHARACTER_ORDER.length;
-  const totalSteps = forwardDistance;
-
-  return Array.from({ length: totalSteps }, (_, stepIndex) => {
-    const nextIndex = (fromIndex + stepIndex + 1) % BOARD_CHARACTER_ORDER.length;
-    return BOARD_CHARACTER_ORDER[nextIndex];
-  });
 }
